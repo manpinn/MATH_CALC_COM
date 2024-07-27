@@ -3,45 +3,70 @@
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>@ViewData["Title"] - MATH_CALC_COM</title>
+    <title>@ViewData["Title"] - MATH_CALC.COM</title>
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
-    <link rel="stylesheet" href="~/MATH_CALC_COM.styles.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/MATH_CALC.COM.styles.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/css/Layout.css" asp-append-version="true" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
 </head>
 <body>
-    <header>
-        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
-            <div class="container-fluid">
-                <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">MATH_CALC_COM</a>
-                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
-                        aria-expanded="false" aria-label="Toggle navigation">
-                    <span class="navbar-toggler-icon"></span>
-                </button>
-                <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
-                    <ul class="navbar-nav flex-grow-1">
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
-                        </li>
-                    </ul>
-                </div>
-            </div>
-        </nav>
-    </header>
-    <div class="container">
-        <main role="main" class="pb-3">
-            @RenderBody()
-        </main>
+    <div class="navbar-ml ml-navbar-grid-container bg-primary">
+        <div class="navbar-ml-left">
+            <i id="navbar-ml-menu" class="bi-list navbar-ml-menu"></i>
+        </div>
+        <div class="navbar-ml-center navbar-ml-title">MATH-CALC.com</div>
+        <div class="navbar-ml-right">
+            <form class="d-flex" role="search">
+                <input class="form-control me-2 navbar-ml-right-search" type="search" placeholder="" aria-label="Search">
+                <button class="btn btn-outline-light" type="submit">Search</button>
+            </form>
+        </div>
     </div>
 
-    <footer class="border-top footer text-muted">
-        <div class="container">
-            &copy; 2024 - MATH_CALC_COM - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+    <div class="ml-sidebar-content">
+        <div id="ml-sidebar" class="ml-sidebar">
+            <!-- content of the sidebar -->
+            <p>this is the sidebar content!</p>
         </div>
-    </footer>
-    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+        <div class="container-ml">
+            <main role="main" class="pb-3">
+                @RenderBody()
+            </main>
+
+        </div>
+
+
+
+    </div>
+
+
+    <script>
+        // Define the media query
+        var mediaQuery = window.matchMedia("(max-width: 768px)");
+
+        // Function to handle the change event
+        function handleMediaChange(e) {
+            if (e.matches) {
+                // Media query matches, apply logic for viewport less than 400px
+                console.log("Media query matched! Viewport is less than 400px wide.");
+            } else {
+                // Media query does not match
+                console.log("Media query did not match. Viewport is wider than 399px.");
+            }
+        }
+
+        // Listen for changes
+        mediaQuery.addListener(handleMediaChange);
+
+        // Initial check
+        handleMediaChange(mediaQuery);
+
+        document.getElementById('navbar-ml-menu').addEventListener('click', function () {
+            var navbar = document.getElementById('ml-sidebar');
+            navbar.classList.toggle('active'); // Toggle the 'active' class on the navbar
+        });
+    </script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>
     @await RenderSectionAsync("Scripts", required: false)
