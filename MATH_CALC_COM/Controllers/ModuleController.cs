@@ -11,7 +11,7 @@ namespace MATH_CALC_COM.Controllers
             return View();
         }
 
-        [Route("/Module/{module_name}")]
+        [Route("/Module/{module_name:regex(^(?!AJAX$).*)}")]
         public IActionResult Module(string module_name)
         {
             string view_name = string.Empty;
@@ -20,14 +20,28 @@ namespace MATH_CALC_COM.Controllers
             {
                 view_name = "1";
 
-                LinearRegression calculator = new LinearRegression();
+                //LinearRegression calculator = new LinearRegression();
 
-                string json = calculator.LinearRegressionTest();
+                //string json = calculator.LinearRegressionTest();
 
-                ViewData["ChartJson"] = json;
+                //ViewData["ChartJson"] = json;
             }
 
             return View(view_name);
+        }
+
+        [HttpPost]
+        [Route("/Module/AJAX/LinearRegression")]
+        public ActionResult AJAX_LinearRegression([FromBody] AJAX_LinearRegression_Model model)
+        {
+            return Json(model);
+        }
+
+        public class AJAX_LinearRegression_Model 
+        {
+            public string? key1 { get; set; }
+
+            public string? key2 { get; set; }
         }
     }
 }

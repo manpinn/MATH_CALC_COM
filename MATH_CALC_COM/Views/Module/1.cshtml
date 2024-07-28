@@ -1,14 +1,52 @@
-﻿
- 
+﻿@{
+    ViewData["Title"] = "Module Linear Regression";
+}
+<h1 class="display-4 text-center border-bottom">Linear Regression</h1>
+
+<p>Here you can find a Visualization of Linear Regression.</p>
+
 <div id="chartDiv"></div>
 
+<div class="d-grid gap-2 d-md-flex">
+    <button id="btn-calculate" class="btn btn-primary" type="button">Calculate</button>
+    <button id="btn-calculate" class="btn btn-primary" type="button">Example Data</button>
+</div>
 
 <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
 <script type="text/javascript">
-    var chartJson = '@Html.Raw(ViewData["ChartJson"])';
-    var chartData = JSON.parse(chartJson);
-    var layout = {
-        title: 'Scroll and Zoom'
-    };
-    Plotly.newPlot('chartDiv', chartData.Fields, layout, { responsive: true, scrollZoom: true, displayModeBar: true });
+
+    var button = document.getElementById('btn-calculate');
+
+    let url = '/Module/AJAX/LinearRegression';
+    let data = { key1: 'mko1', key2: 'mko2' };
+    let serverData = {};
+
+
+
+    function calculate() {
+        //alert('Hello, World!');
+
+        fetch(url, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(data)
+        })
+            .then(response => response.json())
+            .then(data => {
+                serverData = data;
+                console.log(serverData);
+            })
+            .catch((error) => console.error('Error:', error));
+    }
+
+    button.addEventListener('click', calculate);
+
+    // var chartJson = '@Html.Raw(ViewData["ChartJson"])';
+    // var chartData = JSON.parse(chartJson);
+    // var layout = {
+    //     title: 'Scroll and Zoom'
+    // };
+    // Plotly.newPlot('chartDiv', chartData.Fields, layout, { responsive: true, scrollZoom: true, displayModeBar: true });
 </script>  
