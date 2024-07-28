@@ -30,11 +30,17 @@
             <p>@Html.ActionLink("Home", "Index", "Home", null, new { @class = "btn btn-primary btn-lg ml-sidebar-button" })</p>
             <p>@Html.ActionLink("Modules", "Index", "Module", null, new { @class = "btn btn-primary btn-lg ml-sidebar-button" })</p>
         </div>
-        <div class="container-ml">
+        <div class="container-ml" style="margin-left:10px; margin-right:10px;">
             <main role="main" class="pb-3">
                 @RenderBody()
             </main>
+            <footer class="d-flex flex-wrap justify-content-between align-items-center py-3 my-4 border-top">
+                <div class="col-md-4 d-flex align-items-center">
+                    <span class="mb-3 mb-md-0 text-body-secondary">© @DateTime.Now.Year Mario Kozlovac</span>
+                </div>
 
+               
+            </footer>
         </div>
 
 

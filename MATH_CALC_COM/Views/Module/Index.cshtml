@@ -4,25 +4,16 @@
 
 
 
-<h1 class="display-4" text-center>Numerical Mathethematics - Modules</h1>
+<h1 class="display-4 text-center border-bottom">Numerical Mathethematics - Modules</h1>
 
 <h1 class="display-6">Regression</h1>
+<h6>
+    Regression is a statistical method used to determine the relationship between a dependent variable and one or more independent variables, often used for prediction and forecasting.</h1>
 
-<ul class="list-group">
-    <li class="list-group-item row mb-3">
-        <div>
-            <h6>
-                Linear-Regression</h1>
-                <p>Learn about </p>
-            </h6>
-        </div>
-        <div>
-            @Html.ActionLink("mko1", "Index", "Home", null, new { @class = "btn btn-primary btn-lg" })
+<div class="list-group" style="">
+    @Html.ActionLink("Linear Regression", "Index", "Module", null, new { @class="list-group-item list-group-item-action" })
+    @Html.ActionLink("Non-Linear Regression", "Index", "Home", null, new { @class = "list-group-item list-group-item-action" })
+</div>
 
-        </div>
-    </li>
-    <li class="list-group-item">A second item</li>
-    <li class="list-group-item">A third item</li>
-    <li class="list-group-item">A fourth item</li>
-    <li class="list-group-item">And a fifth one</li>
-</ul>
+
+
