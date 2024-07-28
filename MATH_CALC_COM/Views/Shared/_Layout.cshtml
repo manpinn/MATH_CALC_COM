@@ -27,7 +27,8 @@
     <div class="ml-sidebar-content">
         <div id="ml-sidebar" class="ml-sidebar">
             <!-- content of the sidebar -->
-            <p>this is the sidebar content!</p>
+            <p>@Html.ActionLink("Home", "Index", "Home", null, new { @class = "btn btn-primary btn-lg ml-sidebar-button" })</p>
+            <p>@Html.ActionLink("Modules", "Index", "Module", null, new { @class = "btn btn-primary btn-lg ml-sidebar-button" })</p>
         </div>
         <div class="container-ml">
             <main role="main" class="pb-3">

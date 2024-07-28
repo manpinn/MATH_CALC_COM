@@ -95,6 +95,12 @@ body, html {
     display: flex;
 }
 
+.ml-sidebar-button {
+    width: -webkit-fill-available;
+    margin-left: 10px;
+    margin-right: 10px;
+}
+
 @media (max-width: 768px) {
     .ml-sidebar {
         width: 0px;
