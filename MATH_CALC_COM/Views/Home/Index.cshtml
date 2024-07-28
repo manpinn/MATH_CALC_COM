@@ -2,15 +2,24 @@
     ViewData["Title"] = "Home Page";
 }
 
-<div>
-    <div>
-       Overview
-    </div>
-    <div class="row mb-3 text-center">
-        <div class="col-sm-6 col-lg-8 themed-grid-col">
-            <h1 class="display-4">Linear-Regression</h1>
-            <p>Learn about </p>
-        </div>
-        <div class="col-6 col-lg-4 themed-grid-col">Button</div>
-    </div>
+<h1 class="display-4 text-center border-bottom">Numerical Mathematics - Overview</h1>
+
+<p>Numerical mathematics, also known as Numerics, is a branch of mathematics that constructs and analyzes algorithms for continuous mathematical problems. The main application is the approximate calculation of solutions through approximation algorithms using computers.</p>
+<p>Numerical mathematics covers a wide range of topics, including but not limited to:</p>
+<ul>
+    <li>Analysis: The study of change and motion, encompassing areas such as calculus and differential equations.</li>
+    <li>Linear Algebra: The study of vectors and rules to manipulate vectors.</li>
+    <li>Geometry: The study of shape, size, and properties of figures and spaces.</li>
+    <li>Approximation Theory: The study of how functions can best be approximated with simpler functions.</li>
+    <li>Functional Equations: The study of equations where the unknowns are functions.</li>
+    <li>Optimization: The study of finding the best possible solution to a problem.</li>
+    <li>Differential Equations: The study of equations involving derivatives.</li>
+</ul>
+<p>Numerical mathematics is widely used in fields like engineering, physics, computer sciences, and more. It provides the mathematical foundations of numerical methods and demonstrates their performance on examples, exercises, and real-life applications.</p>
+
+<p>On this website you can find modules which visualize numerical algorithms.</p>
+
+<div class="list-group" style="">
+    @Html.ActionLink("Modules", "Index", "Module", null, new { @class = "list-group-item list-group-item-action" })
+    @Html.ActionLink("About", "About", "Home", null, new { @class = "list-group-item list-group-item-action" })
 </div>
