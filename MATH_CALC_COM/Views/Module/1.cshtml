@@ -1,0 +1,11 @@
+﻿
+
+<div id="chartDiv"></div>
+
+
+<script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+<script type="text/javascript">
+    var chartJson = '@Html.Raw(ViewData["ChartJson"])';
+    var chartData = JSON.parse(chartJson);
+    Plotly.newPlot('chartDiv', chartData.Fields, {}, { responsive: true });
+</script>
