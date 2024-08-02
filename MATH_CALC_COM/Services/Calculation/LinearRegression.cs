@@ -33,7 +33,7 @@ namespace MATH_CALC_COM.Services.Calculation
             return json;
         }
 
-        private (double[] x_vector, double[] y_vector) LinearRegressionCalculator(int degree, double[] original_x_vector, double[] original_y_vector)
+        private double[] LinearRegressionCalculator(int degree, double[] original_x_vector, double[] original_y_vector)
         {
             //degree 1: x1 + x2*t
             //degree 2: x1 + x2*t + x3
@@ -83,11 +83,25 @@ namespace MATH_CALC_COM.Services.Calculation
 
             Vector<double> b = Vector<double>.Build.DenseOfArray(original_y_vector);
 
-            var Q_transposed_b = QR.Q.Transpose() * b;
+            var Q_transposed_b = QR.Q.Transpose().Multiply(b);
+
+            var coefficients = QR.R.Solve(Q_transposed_b);
+
+            double[] y_vector = new double[original_x_vector.Length];
+
+            for(int i = 0;  i < original_x_vector.Length; i++)
+            {
+                double value = 0.0;
+
+                for(int j = 0; j < degree; j++)
+                {
+                    
 
 
+                }
+            }
 
-            return (x_vector, y_vector);
+            return y_vector;
         }
 
         public string LinearRegressionTest() 
