@@ -79,6 +79,14 @@ namespace MATH_CALC_COM.Services.Calculation
 
             var A = Matrix<double>.Build.DenseOfColumnVectors(a_column_array);
 
+            var QR = A.QR(MathNet.Numerics.LinearAlgebra.Factorization.QRMethod.Thin);
+
+            Vector<double> b = Vector<double>.Build.DenseOfArray(original_y_vector);
+
+            var Q_transposed_b = QR.Q.Transpose() * b;
+
+
+
             return (x_vector, y_vector);
         }
 
