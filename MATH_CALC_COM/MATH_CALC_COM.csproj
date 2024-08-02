@@ -23,6 +23,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <PackageReference Include="MathNet.Numerics" Version="5.0.0" />
     <PackageReference Include="Microsoft.AspNetCore.Mvc.Razor.RuntimeCompilation" Version="8.0.7" />
     <PackageReference Include="Plotly.NET" Version="5.0.0" />
   </ItemGroup>

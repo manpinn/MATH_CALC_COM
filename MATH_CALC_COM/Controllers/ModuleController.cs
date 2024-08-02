@@ -43,5 +43,7 @@ namespace MATH_CALC_COM.Controllers
 
             public string? key2 { get; set; }
         }
+
+        
     }
 }
