@@ -16,7 +16,7 @@ namespace MATH_CALC_COM.Services.Calculation
 
             foreach (LinearRegressionGraph graph in graphs)
             {
-                var retVals = LinearRegressionCalculator(graph.coefficients, x_vector, y_vector);
+                var retVals = LinearRegressionCalculator(graph.degree, x_vector, y_vector);
 
                 var chartY = Chart2D.Chart.Line<double, double, string>(retVals.x_vector, retVals.y_vector, true, graph.name);
 
@@ -33,18 +33,51 @@ namespace MATH_CALC_COM.Services.Calculation
             return json;
         }
 
-        private (double[] x_vector, double[] y_vector) LinearRegressionCalculator(double[] coefficients, double[] original_x_vector, double[] original_y_vector)
+        private (double[] x_vector, double[] y_vector) LinearRegressionCalculator(int degree, double[] original_x_vector, double[] original_y_vector)
         {
-            Vector<double>[] a_column_array = new Vector[coefficients.Length];
+            //degree 1: x1 + x2*t
+            //degree 2: x1 + x2*t + x3
 
-            for (int i = 0; i < coefficients.Length; i++)
+            Vector<double>[] a_column_array = new Vector[degree + 1];
+
+            for (int i = 0; i <= degree; i++)
             {
-                Vector<double> v = Vector<double>.Build.Dense(10);
+                if(i == 0)
+                {
+                    double[] values = new double[original_x_vector.Length];
 
-                a_column_array[i] = v;
+                    for(int j = 0; j < original_x_vector.Length; j++)
+                    {
+                        values[j] = 1.0;
+                    }
+
+                    Vector<double> v = Vector<double>.Build.DenseOfArray(values);
+
+                    a_column_array[i] = v;
+                }
+                else
+                {
+                    double[] values = new double[original_x_vector.Length];
+
+                    for (int j = 0; j < original_x_vector.Length; j++)
+                    {
+                        double value = 0.0;
+
+                        for(int k = 0; k < degree; k++)
+                        {
+                            value *= original_x_vector[j];
+                        }
+
+                        values[j] = value;
+                    }
+
+                    Vector<double> v = Vector<double>.Build.DenseOfArray(values);
+
+                    a_column_array[i] = v;
+                }
             }
 
-            var M = Matrix<double>.Build.DenseOfColumnVectors(v);
+            var A = Matrix<double>.Build.DenseOfColumnVectors(a_column_array);
 
             return (x_vector, y_vector);
         }
@@ -88,8 +121,8 @@ namespace MATH_CALC_COM.Services.Calculation
 
     public class LinearRegressionGraph 
     {
-        public double[] coefficients;
-
         public string name;
+
+        public int degree;
     }
 }
