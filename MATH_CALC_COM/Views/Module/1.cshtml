@@ -15,10 +15,30 @@
 <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
 <script type="text/javascript">
 
+    class LinearRegressionGraph {
+        constructor(name, degree) {
+            this.name = name;
+            this.degree = degree;
+        }
+    }
+
+    class AJAX_LinearRegression_Model {
+        constructor(graphs, x_vector, y_vector) {
+            this.graphs = graphs;
+            this.x_vector = x_vector;
+            this.y_vector = y_vector;
+        }
+    }
+
+    const graph1 = new LinearRegressionGraph("Graph 1", 2);
+    const graph2 = new LinearRegressionGraph("Graph 2", 3);
+
+    const model = new AJAX_LinearRegression_Model([graph1, graph2], [1, 2, 3], [4, 5, 6]);
+
     var button = document.getElementById('btn-calculate');
 
     let url = '/Module/AJAX/LinearRegression';
-    let data = { key1: 'mko1', key2: 'mko2' };
+    let data = model;
     let serverData = {};
 
 
@@ -37,16 +57,20 @@
             .then(data => {
                 serverData = data;
                 console.log(serverData);
+
+                //var chartJson = '@Html.Raw(ViewData["ChartJson"])';
+                var chartData = JSON.parse(serverData);
+                var layout = {
+                    title: 'Scroll and Zoom'
+                };
+
+                Plotly.newPlot('chartDiv', chartData.Fields[0], layout, { responsive: true, scrollZoom: true, displayModeBar: true });
+                
             })
             .catch((error) => console.error('Error:', error));
     }
 
     button.addEventListener('click', calculate);
 
-    // var chartJson = '@Html.Raw(ViewData["ChartJson"])';
-    // var chartData = JSON.parse(chartJson);
-    // var layout = {
-    //     title: 'Scroll and Zoom'
-    // };
-    // Plotly.newPlot('chartDiv', chartData.Fields, layout, { responsive: true, scrollZoom: true, displayModeBar: true });
+    
 </script>  

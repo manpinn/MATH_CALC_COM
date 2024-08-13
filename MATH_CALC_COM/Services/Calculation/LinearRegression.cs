@@ -18,7 +18,7 @@ namespace MATH_CALC_COM.Services.Calculation
             {
                 var retVals = LinearRegressionCalculator(graph.degree, x_vector, y_vector);
 
-                var chartY = Chart2D.Chart.Line<double, double, string>(retVals.x_vector, retVals.y_vector, true, graph.name);
+                var chartY = Chart2D.Chart.Line<double, double, string>(x_vector, retVals, true, graph.name);
 
                 chartList.Add(chartY);
             }
@@ -36,11 +36,11 @@ namespace MATH_CALC_COM.Services.Calculation
         private double[] LinearRegressionCalculator(int degree, double[] original_x_vector, double[] original_y_vector)
         {
             //degree 1: x1 + x2*t
-            //degree 2: x1 + x2*t + x3
+            //degree 2: x1 + x2*t + x3*(t^2)
 
-            Vector<double>[] a_column_array = new Vector[degree + 1];
+            Vector<double>[] a_column_array = new Vector[degree];
 
-            for (int i = 0; i <= degree; i++)
+            for (int i = 0; i < degree; i++)
             {
                 if(i == 0)
                 {
@@ -61,7 +61,7 @@ namespace MATH_CALC_COM.Services.Calculation
 
                     for (int j = 0; j < original_x_vector.Length; j++)
                     {
-                        double value = 0.0;
+                        double value = 1.0;
 
                         for(int k = 0; k < degree; k++)
                         {
@@ -77,7 +77,7 @@ namespace MATH_CALC_COM.Services.Calculation
                 }
             }
 
-            var A = Matrix<double>.Build.DenseOfColumnVectors(a_column_array);
+            var A = Matrix<double>.Build.DenseOfColumns(a_column_array);
 
             var QR = A.QR(MathNet.Numerics.LinearAlgebra.Factorization.QRMethod.Thin);
 
@@ -93,12 +93,19 @@ namespace MATH_CALC_COM.Services.Calculation
             {
                 double value = 0.0;
 
-                for(int j = 0; j < degree; j++)
+                for(int j = 1; j <= degree; j++)
                 {
-                    
+                    double t_value = 1.0;
 
+                    for(int k = 1; k <= degree; k++)
+                    {
+                        t_value *= original_x_vector[i];
+                    }
 
+                    value += coefficients[j - 1] * t_value;
                 }
+
+                y_vector[i] = value;
             }
 
             return y_vector;
@@ -143,8 +150,8 @@ namespace MATH_CALC_COM.Services.Calculation
 
     public class LinearRegressionGraph 
     {
-        public string name;
+        public string name { get; set; }
 
-        public int degree;
+        public int degree { get; set; }
     }
 }

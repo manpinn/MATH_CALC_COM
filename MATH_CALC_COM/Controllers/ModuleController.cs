@@ -34,14 +34,20 @@ namespace MATH_CALC_COM.Controllers
         [Route("/Module/AJAX/LinearRegression")]
         public ActionResult AJAX_LinearRegression([FromBody] AJAX_LinearRegression_Model model)
         {
-            return Json(model);
+            LinearRegression calculator = new LinearRegression();
+
+            string json = calculator.LinearRegressionPlotter(model.graphs, model.x_vector, model.y_vector);
+
+            return Json(json);
         }
 
         public class AJAX_LinearRegression_Model 
         {
-            public string? key1 { get; set; }
+            public LinearRegressionGraph[] graphs { get; set; }
 
-            public string? key2 { get; set; }
+            public double[] x_vector { get; set; }
+
+            public double[] y_vector { get; set; }
         }
 
         
