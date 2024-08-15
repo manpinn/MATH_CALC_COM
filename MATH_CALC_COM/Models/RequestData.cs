@@ -1,9 +1,12 @@
 ﻿using MATH_CALC_COM.Services.Enums;
+using Microsoft.EntityFrameworkCore;
+using System.ComponentModel.DataAnnotations;
 
 namespace MATH_CALC_COM.Models
 {
     public class RequestData
     {
+        [Key]
         public int id {  get; set; }
 
         public DateTime datetime { get; set; }

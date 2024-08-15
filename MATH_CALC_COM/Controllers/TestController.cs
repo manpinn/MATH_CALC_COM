@@ -1,4 +1,6 @@
 ﻿using MATH_CALC_COM.Models;
+using MATH_CALC_COM.Services.DatabaseContext;
+using MATH_CALC_COM.Services.Enums;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.ViewEngines;
 using System.Net;
@@ -8,6 +10,13 @@ namespace MATH_CALC_COM.Controllers
 {
     public class TestController : Controller
     {
+        private readonly RequestDataContext _context;
+
+        public TestController(RequestDataContext context)
+        {
+            _context = context;
+        }
+
         public IActionResult Index()
         {
             Test testObject = new Test() { Teststring = "MKO2", Testdate = DateTime.Now };
@@ -54,22 +63,27 @@ namespace MATH_CALC_COM.Controllers
 
             string ipAddressString = clientIpAddress?.ToString();
 
+            InternetProtocolType ipv_type = 0;
+
             // Überprüfen, ob die IP-Adresse IPv4 oder IPv6 ist
-            if (clientIpAddress != null)
+            if (clientIpAddress.AddressFamily == System.Net.Sockets.AddressFamily.InterNetwork)
             {
-                if (clientIpAddress.AddressFamily == System.Net.Sockets.AddressFamily.InterNetwork)
-                {
-                    // IPv4
-                    
-                }
-                else if (clientIpAddress.AddressFamily == System.Net.Sockets.AddressFamily.InterNetworkV6)
-                {
-                    // IPv6
-                    
-                }
+                // IPv4
+
+                ipv_type = InternetProtocolType.IPV4;
+            }
+            else if (clientIpAddress.AddressFamily == System.Net.Sockets.AddressFamily.InterNetworkV6)
+            {
+                // IPv6
+
+                ipv_type = InternetProtocolType.IPV6;
             }
 
-   
+            RequestData requestData = new RequestData() { datetime = DateTime.Now, url = Request.Path, ip_adress = ipAddressString, ip_type = ipv_type };
+
+            _context.RequestData.Add(requestData);
+
+            _context.SaveChanges();
         }
 
     }
