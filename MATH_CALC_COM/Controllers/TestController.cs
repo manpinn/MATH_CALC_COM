@@ -1,6 +1,7 @@
 ﻿using MATH_CALC_COM.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.ViewEngines;
+using System.Net;
 using static System.Net.Mime.MediaTypeNames;
 
 namespace MATH_CALC_COM.Controllers
@@ -27,12 +28,12 @@ namespace MATH_CALC_COM.Controllers
         //    return View();
         //}
 
-        [Route("/Test/{article_name}")]
-        public IActionResult Article(string article_name)
-        {
-            Test testObject = new Test() { Teststring = article_name, Testdate = DateTime.Now };
-            return View("Article", testObject);
-        }
+        //[Route("/Test/{article_name}")]
+        //public IActionResult Article(string article_name)
+        //{
+        //    Test testObject = new Test() { Teststring = article_name, Testdate = DateTime.Now };
+        //    return View("Article", testObject);
+        //}
 
         //public IActionResult Article()
         //{
@@ -46,6 +47,30 @@ namespace MATH_CALC_COM.Controllers
         //    //test mko
         //    return $"This is the Custom action method with custom string: {id}";
         //}
+
+        public void IP()
+        {
+            IPAddress clientIpAddress = HttpContext.Connection.RemoteIpAddress;
+
+            string ipAddressString = clientIpAddress?.ToString();
+
+            // Überprüfen, ob die IP-Adresse IPv4 oder IPv6 ist
+            if (clientIpAddress != null)
+            {
+                if (clientIpAddress.AddressFamily == System.Net.Sockets.AddressFamily.InterNetwork)
+                {
+                    // IPv4
+                    
+                }
+                else if (clientIpAddress.AddressFamily == System.Net.Sockets.AddressFamily.InterNetworkV6)
+                {
+                    // IPv6
+                    
+                }
+            }
+
+   
+        }
 
     }
 }
