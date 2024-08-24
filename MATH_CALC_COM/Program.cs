@@ -1,4 +1,7 @@
 using MATH_CALC_COM.Services.DatabaseContext;
+using MATH_CALC_COM.Services.Middleware;
+using MATH_CALC_COM.Services.Request;
+using MathNet.Numerics;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -8,7 +11,13 @@ builder.Services.AddControllersWithViews().AddRazorRuntimeCompilation();
 
 // Add services to the container.
 builder.Services.AddDbContext<RequestDataContext>(options =>
-    options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
+    options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")).EnableSensitiveDataLogging());
+
+builder.Services.AddControllers(options =>
+{
+    options.Filters.Add<RequestDataFilter>();
+});
+
 
 var app = builder.Build();
 
@@ -19,6 +28,8 @@ if (!app.Environment.IsDevelopment())
     // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
     app.UseHsts();
 }
+
+//app.UseMiddlewareExtensions();
 
 app.UseHttpsRedirection();
 app.UseStaticFiles();
