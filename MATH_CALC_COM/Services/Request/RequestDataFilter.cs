@@ -24,10 +24,10 @@ namespace MATH_CALC_COM.Services.Request
                 {
                     var dbContext = scope.ServiceProvider.GetRequiredService<RequestDataContext>();
 
-                    IPAddress clientIpAddress = context.HttpContext.Connection.RemoteIpAddress;
-
                     string ipAddressString = context.HttpContext.Request.Headers["X-Forwarded-For"].FirstOrDefault()
                          ?? context.HttpContext.Connection.RemoteIpAddress?.ToString();
+
+                    IPAddress ipAddress = IPAddress.Parse(ipAddressString);
 
                     if (string.IsNullOrEmpty(ipAddressString))
                     {
@@ -38,13 +38,13 @@ namespace MATH_CALC_COM.Services.Request
                     InternetProtocolType ipv_type = 0;
 
                     // Überprüfen, ob die IP-Adresse IPv4 oder IPv6 ist
-                    if (clientIpAddress.AddressFamily == System.Net.Sockets.AddressFamily.InterNetwork)
+                    if (ipAddress.AddressFamily == System.Net.Sockets.AddressFamily.InterNetwork)
                     {
                         // IPv4
 
                         ipv_type = InternetProtocolType.IPV4;
                     }
-                    else if (clientIpAddress.AddressFamily == System.Net.Sockets.AddressFamily.InterNetworkV6)
+                    else if (ipAddress.AddressFamily == System.Net.Sockets.AddressFamily.InterNetworkV6)
                     {
                         // IPv6
 

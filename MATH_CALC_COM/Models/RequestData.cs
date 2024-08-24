@@ -1,9 +1,11 @@
 ﻿using MATH_CALC_COM.Services.Enums;
 using Microsoft.EntityFrameworkCore;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace MATH_CALC_COM.Models
 {
+    [Table("request_data")]
     public class RequestData
     {
         [Key]
