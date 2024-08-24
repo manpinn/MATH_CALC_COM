@@ -11,9 +11,12 @@ namespace MATH_CALC_COM.Services.Request
     {
         private readonly IServiceScopeFactory _serviceScopeFactory;
 
-        public RequestDataFilter(IServiceScopeFactory serviceScopeFactory)
+        private readonly ILogger<RequestDataFilter> _logger;
+
+        public RequestDataFilter(IServiceScopeFactory serviceScopeFactory, ILogger<RequestDataFilter> logger)
         {
             _serviceScopeFactory = serviceScopeFactory;
+            _logger = logger;
         }
 
         public async Task OnActionExecutionAsync(ActionExecutingContext context, ActionExecutionDelegate next)
@@ -59,7 +62,7 @@ namespace MATH_CALC_COM.Services.Request
                 }
                 catch (Exception ex)
                 {
-
+                    _logger.LogError(ex, ex.Message);
                 }
             }
 
