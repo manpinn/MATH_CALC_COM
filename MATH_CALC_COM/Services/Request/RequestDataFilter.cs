@@ -26,7 +26,14 @@ namespace MATH_CALC_COM.Services.Request
 
                     IPAddress clientIpAddress = context.HttpContext.Connection.RemoteIpAddress;
 
-                    string ipAddressString = clientIpAddress?.ToString();
+                    string ipAddressString = context.HttpContext.Request.Headers["X-Forwarded-For"].FirstOrDefault()
+                         ?? context.HttpContext.Connection.RemoteIpAddress?.ToString();
+
+                    if (string.IsNullOrEmpty(ipAddressString))
+                    {
+                        // Handle the case where the IP address is null
+                        await next();
+                    }
 
                     InternetProtocolType ipv_type = 0;
 
