@@ -3,6 +3,7 @@ using MATH_CALC_COM.Services.Middleware;
 using MATH_CALC_COM.Services.Request;
 using MathNet.Numerics;
 using Microsoft.EntityFrameworkCore;
+using System.Security.Cryptography.X509Certificates;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -26,6 +27,24 @@ builder.Logging.ClearProviders();
 builder.Logging.AddConsole();
 builder.Logging.AddDebug();
 
+builder.Configuration.AddJsonFile("appsettings.json", optional: false, reloadOnChange: true);
+
+builder.Configuration.AddJsonFile($"appsettings.{builder.Environment.EnvironmentName}.json", optional: true, reloadOnChange: true);
+
+
+builder.WebHost.ConfigureKestrel(serverOptions =>
+{
+    if (builder.Environment.IsProduction())
+    {
+        serverOptions.ConfigureHttpsDefaults(httpsOptions =>
+        {
+            httpsOptions.ServerCertificate = new X509Certificate2(
+                builder.Configuration["Kestrel:Endpoints:Https:Certificate:Path"],
+                builder.Configuration["Kestrel:Endpoints:Https:Certificate:Password"]);
+        });
+    }
+});
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -38,7 +57,11 @@ if (!app.Environment.IsDevelopment())
 
 //app.UseMiddlewareExtensions();
 
-app.UseHttpsRedirection();
+if (builder.Environment.IsProduction())
+{
+    app.UseHttpsRedirection();
+}
+
 app.UseStaticFiles();
 
 app.UseRouting();
