@@ -18,6 +18,8 @@ builder.Services.AddControllers(options =>
     options.Filters.Add<RequestDataFilter>();
 });
 
+builder.Services.AddLogging();
+
 // Configure logging
 builder.Logging.ClearProviders();
 builder.Logging.AddConsole();

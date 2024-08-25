@@ -1,6 +1,8 @@
 ﻿using MATH_CALC_COM.Models;
 using MATH_CALC_COM.Services.DatabaseContext;
 using MATH_CALC_COM.Services.Enums;
+using MATH_CALC_COM.Services.Helpers;
+using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc.Filters;
 using Microsoft.EntityFrameworkCore;
 using System.Net;
@@ -11,12 +13,13 @@ namespace MATH_CALC_COM.Services.Request
     {
         private readonly IServiceScopeFactory _serviceScopeFactory;
 
+        private readonly IWebHostEnvironment _env;
+
         private readonly ILogger<RequestDataFilter> _logger;
 
-        public RequestDataFilter(IServiceScopeFactory serviceScopeFactory, ILogger<RequestDataFilter> logger)
+        public RequestDataFilter(IServiceScopeFactory serviceScopeFactory, ILogger<RequestDataFilter> logger, IWebHostEnvironment env)
         {
             _serviceScopeFactory = serviceScopeFactory;
-            _logger = logger;
         }
 
         public async Task OnActionExecutionAsync(ActionExecutingContext context, ActionExecutionDelegate next)
@@ -62,7 +65,7 @@ namespace MATH_CALC_COM.Services.Request
                 }
                 catch (Exception ex)
                 {
-                    _logger.LogError(ex, ex.Message);
+                    _logger.LogCustomError(_env, string.Empty, ex);
                 }
             }
 
