@@ -13,9 +13,17 @@ namespace MATH_CALC_COM.Services.Helpers
             {
                 string logDirectory = Path.Combine(env.ContentRootPath, "Logs");
 
-                string fileName = "log_" + DateTime.Now.ToString("yyyy_MM_dd_HH_mm_ss") + ".txt";
+                if (!Directory.Exists(logDirectory))
+                {
+                    Directory.CreateDirectory(logDirectory);
+                }
+
+                    string fileName = "log_" + DateTime.Now.ToString("yyyy_MM_dd_HH_mm_ss") + ".txt";
+               
                 var logFilePath = Path.Combine(logDirectory, fileName);
+                
                 File.AppendAllText(logFilePath, $"{DateTime.Now}: {message}{Environment.NewLine}");
+                
                 logger.LogInformation(message);
             }
         }
@@ -26,6 +34,11 @@ namespace MATH_CALC_COM.Services.Helpers
             {
 
                 string logDirectory = Path.Combine(env.ContentRootPath, "Logs");
+
+                if (!Directory.Exists(logDirectory))
+                {
+                    Directory.CreateDirectory(logDirectory);
+                }
 
                 string fileName = "log_" + DateTime.Now.ToString("yyyy_MM_dd_HH_mm_ss") + ".txt";
                 

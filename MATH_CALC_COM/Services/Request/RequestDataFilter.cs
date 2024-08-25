@@ -20,6 +20,10 @@ namespace MATH_CALC_COM.Services.Request
         public RequestDataFilter(IServiceScopeFactory serviceScopeFactory, ILogger<RequestDataFilter> logger, IWebHostEnvironment env)
         {
             _serviceScopeFactory = serviceScopeFactory;
+
+            _logger = logger;
+
+            _env = env;
         }
 
         public async Task OnActionExecutionAsync(ActionExecutingContext context, ActionExecutionDelegate next)
@@ -62,6 +66,8 @@ namespace MATH_CALC_COM.Services.Request
                     dbContext.RequestData.Add(requestData);
 
                     await dbContext.SaveChangesAsync();
+
+                    throw new InvalidOperationException();
                 }
                 catch (Exception ex)
                 {

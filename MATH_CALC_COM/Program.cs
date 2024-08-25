@@ -19,6 +19,7 @@ builder.Services.AddControllers(options =>
 });
 
 builder.Services.AddLogging();
+builder.Services.AddSingleton<RequestDataFilter>();
 
 // Configure logging
 builder.Logging.ClearProviders();
