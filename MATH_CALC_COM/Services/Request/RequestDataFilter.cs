@@ -66,8 +66,6 @@ namespace MATH_CALC_COM.Services.Request
                     dbContext.RequestData.Add(requestData);
 
                     await dbContext.SaveChangesAsync();
-
-                    throw new InvalidOperationException();
                 }
                 catch (Exception ex)
                 {
