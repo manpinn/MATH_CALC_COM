@@ -49,19 +49,24 @@ namespace MATH_CALC_COM.Services.Helpers
                 if (ex != null && string.IsNullOrEmpty(message) == false)
                 {
                     errorString = ex.ToString() + "; " + ex.Message + "; " + message;
+
+                    logger.LogError(ex, ex.Message + "; " + message);
                 }
                 else if (ex != null && string.IsNullOrEmpty(message) == true)
                 {
                     errorString = ex.ToString() + "; " + ex.Message;
+
+                    logger.LogError(ex, ex.Message);
                 }
                 else
                 {
                     errorString = message;
+
+                    logger.LogError(message);
                 }
                 
                 File.AppendAllText(logFilePath, $"{DateTime.Now}: ERROR: { errorString }{Environment.NewLine}");
-                
-                logger.LogError(ex, ex.Message);
+               
             }
         }
     }
