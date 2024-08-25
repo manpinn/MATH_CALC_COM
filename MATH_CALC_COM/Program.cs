@@ -2,6 +2,7 @@ using MATH_CALC_COM.Services.DatabaseContext;
 using MATH_CALC_COM.Services.Middleware;
 using MATH_CALC_COM.Services.Request;
 using MathNet.Numerics;
+using Microsoft.AspNetCore.Authentication.Certificate;
 using Microsoft.EntityFrameworkCore;
 using System.Security.Cryptography.X509Certificates;
 
@@ -21,6 +22,9 @@ builder.Services.AddControllers(options =>
 
 builder.Services.AddLogging();
 builder.Services.AddSingleton<RequestDataFilter>();
+
+builder.Services.AddAuthentication(CertificateAuthenticationDefaults.AuthenticationScheme)
+    .AddCertificate();
 
 // Configure logging
 builder.Logging.ClearProviders();
