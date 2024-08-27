@@ -64,7 +64,7 @@ body, html {
     color: white;
     align-items: center;
     justify-content: center;
-    display: none;
+    display: flex;
 }
 
     .navbar-ml-menu:hover {
@@ -99,31 +99,4 @@ body, html {
     width: -webkit-fill-available;
     margin-left: 10px;
     margin-right: 10px;
-}
-
-@media (max-width: 768px) {
-    .ml-sidebar {
-        width: 0px;
-        transition: width 0.3s ease-in-out, opacity 0.3s ease-in-out;
-        opacity: 0;
-    }
-
-    .navbar-ml-right-search:focus {
-        width: 100px;
-        transition: width 0.3s ease-in-out;
-    }
-
-    .navbar-ml-right-search:not(:focus) {
-        transition: width 0.3s ease-in-out;
-    }
-
-    #ml-sidebar.active {
-        width: 250px;
-        transition: width 0.3s ease-in-out, opacity 0.3s ease-in-out;
-        opacity: 1;
-    }
-
-    .navbar-ml-menu {
-        display: flex;
-    }
 }

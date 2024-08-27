@@ -42,7 +42,7 @@
                     <span class="mb-3 mb-md-0 text-body-secondary">© @DateTime.Now.Year Mario Kozlovac</span>
                 </div>
 
-               
+
             </footer>
         </div>
 
@@ -52,34 +52,58 @@
 
 
     <script>
-        // Define the media query
-        var mediaQuery = window.matchMedia("(max-width: 768px)");
+        const mediaQuery = window.matchMedia('(max-width: 1000px)');
 
-        // Function to handle the change event
-        function handleMediaChange(e) {
-            if (e.matches) {
-                // Media query matches, apply logic for viewport less than 400px
-                console.log("Media query matched! Viewport is less than 400px wide.");
+        const sidebar = document.querySelector('.ml-sidebar');
+
+        function showSidebar() {
+            sidebar.style.width = '250px'; // or any desired width
+            sidebar.style.opacity = '1';
+            sidebar.classList.add('active');
+        }
+
+        function hideSidebar() {
+            sidebar.style.width = '0px';
+            sidebar.style.opacity = '0';
+            sidebar.classList.remove('active');
+        }
+
+        function handleMediaQueryChange(event) {
+            if (event.matches) {
+                // Media query matches (screen width is 1000px or less)
+                sidebar.style.width = '0px';
+                sidebar.style.opacity = '0';
+                sidebar.style.transition = 'width 0.3s ease-in-out, opacity 0.3s ease-in-out';
+                sidebar.classList.remove('active');
             } else {
-                // Media query does not match
-                console.log("Media query did not match. Viewport is wider than 399px.");
+                // Media query does not match (screen width is greater than 1000px)
+                sidebar.style.width = '';
+                sidebar.style.opacity = '';
+                sidebar.style.transition = '';
+                sidebar.classList.add('active');
             }
         }
 
-        // Listen for changes
-        mediaQuery.addListener(handleMediaChange);
+        mediaQuery.addListener(handleMediaQueryChange);
 
-        // Initial check
-        handleMediaChange(mediaQuery);
+        handleMediaQueryChange(mediaQuery);
 
         document.getElementById('navbar-ml-menu').addEventListener('click', function () {
-            var navbar = document.getElementById('ml-sidebar');
-            navbar.classList.toggle('active'); // Toggle the 'active' class on the navbar
+            if (sidebar.classList.contains('active')) {
+                hideSidebar();
+            } else {
+                showSidebar();
+            }
         });
+
+
+
+
+
     </script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>
     @await RenderSectionAsync("Scripts", required: false)
-    
+
 </body>
 </html>
