@@ -63,23 +63,7 @@ namespace MATH_CALC_COM.Controllers
 
             string ipAddressString = clientIpAddress?.ToString();
 
-            InternetProtocolType ipv_type = 0;
-
-            // Überprüfen, ob die IP-Adresse IPv4 oder IPv6 ist
-            if (clientIpAddress.AddressFamily == System.Net.Sockets.AddressFamily.InterNetwork)
-            {
-                // IPv4
-
-                ipv_type = InternetProtocolType.IPV4;
-            }
-            else if (clientIpAddress.AddressFamily == System.Net.Sockets.AddressFamily.InterNetworkV6)
-            {
-                // IPv6
-
-                ipv_type = InternetProtocolType.IPV6;
-            }
-
-            RequestData requestData = new RequestData() { datetime = DateTime.Now, url = Request.Path, ip_adress = ipAddressString, ip_type = ipv_type };
+            RequestData requestData = new RequestData() { datetime = DateTime.Now, url = Request.Path, ip_adress = ipAddressString };
 
             _context.RequestData.Add(requestData);
 

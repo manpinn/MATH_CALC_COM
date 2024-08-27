@@ -16,7 +16,5 @@ namespace MATH_CALC_COM.Models
         public string url { get; set; }
         
         public string ip_adress { get; set; }
-
-        public InternetProtocolType ip_type { get; set; }
     }
 }
