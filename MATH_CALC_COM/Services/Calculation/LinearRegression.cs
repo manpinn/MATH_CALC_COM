@@ -38,15 +38,15 @@ namespace MATH_CALC_COM.Services.Calculation
             //degree 1: x1 + x2*t
             //degree 2: x1 + x2*t + x3*(t^2)
 
-            Vector<double>[] a_column_array = new Vector[degree];
+            Vector<double>[] a_column_array = new Vector[degree + 1];
 
             for (int i = 0; i < degree; i++)
             {
-                if(i == 0)
+                if (i == 0)
                 {
                     double[] values = new double[original_x_vector.Length];
 
-                    for(int j = 0; j < original_x_vector.Length; j++)
+                    for (int j = 0; j < original_x_vector.Length; j++)
                     {
                         values[j] = 1.0;
                     }
@@ -63,7 +63,7 @@ namespace MATH_CALC_COM.Services.Calculation
                     {
                         double value = 1.0;
 
-                        for(int k = 0; k < degree; k++)
+                        for (int k = 0; k < degree; k++)
                         {
                             value *= original_x_vector[j];
                         }
@@ -87,9 +87,27 @@ namespace MATH_CALC_COM.Services.Calculation
 
             var coefficients = QR.R.Solve(Q_transposed_b);
 
-            double[] y_vector = new double[original_x_vector.Length];
+            int size_of_vector = 10;
 
-            for(int i = 0;  i < original_x_vector.Length; i++)
+            double[] x_vector = new double[size_of_vector];
+
+            double delta_x = (original_x_vector[original_x_vector.Length - 1] - original_x_vector[0]) / (double)size_of_vector;
+
+            for (int i = 0; i < x_vector.Length; i++)
+            {
+                if(i == 0)
+                {
+                    x_vector[i] = original_x_vector[0];
+                }
+                else
+                {
+                    x_vector[i] = x_vector[i - 1] + delta_x;
+                }
+            }
+
+            double[] y_vector = new double[x_vector.Length];
+
+            for(int i = 0;  i < x_vector.Length; i++)
             {
                 double value = 0.0;
 
@@ -99,7 +117,7 @@ namespace MATH_CALC_COM.Services.Calculation
 
                     for(int k = 1; k <= degree; k++)
                     {
-                        t_value *= original_x_vector[i];
+                        t_value *= x_vector[i];
                     }
 
                     value += coefficients[j - 1] * t_value;
