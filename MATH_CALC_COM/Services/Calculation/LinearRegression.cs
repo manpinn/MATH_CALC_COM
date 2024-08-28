@@ -35,12 +35,12 @@ namespace MATH_CALC_COM.Services.Calculation
 
         private double[] LinearRegressionCalculator(int degree, double[] original_x_vector, double[] original_y_vector)
         {
-            //degree 1: x1 + x2*t
-            //degree 2: x1 + x2*t + x3*(t^2)
+            //degree 1: a0 + a1*t
+            //degree 2: a0 + a1*t + a2*(t^2)
 
             Vector<double>[] a_column_array = new Vector[degree + 1];
 
-            for (int i = 0; i < degree; i++)
+            for (int i = 0; i <= degree; i++)
             {
                 if (i == 0)
                 {
@@ -89,7 +89,7 @@ namespace MATH_CALC_COM.Services.Calculation
 
             int size_of_vector = 10;
 
-            double[] x_vector = new double[size_of_vector];
+            double[] x_vector = new double[size_of_vector + 1];
 
             double delta_x = (original_x_vector[original_x_vector.Length - 1] - original_x_vector[0]) / (double)size_of_vector;
 
