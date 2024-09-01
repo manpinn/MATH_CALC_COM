@@ -5,6 +5,11 @@
 
 <p>Here you can find a Visualization of Linear Regression.</p>
 
+<div class="ml-spinner" style="display: none; align-items: center; margin-top:10px; margin-bottom:10px;">
+    <div class="spinner-grow text-secondary" role="status"></div>
+    <div style="margin-left: 10px;">Loading...</div>
+</div>
+
 <div id="chartDiv"></div>
 
 <div class="d-grid gap-2 d-md-flex">
@@ -46,6 +51,8 @@
     function calculate() {
         //alert('Hello, World!');
 
+        document.querySelector('.ml-spinner').style.display = 'flex';
+
         fetch(url, {
             method: 'POST',
             headers: {
@@ -65,12 +72,20 @@
                 };
 
                 Plotly.newPlot('chartDiv', chartData.Fields[0], layout, { responsive: true, scrollZoom: true, displayModeBar: true });
-                
+
+                document.querySelector('.ml-spinner').style.display = 'none';
             })
-            .catch((error) => console.error('Error:', error));
+            .catch((error) => {
+          
+                document.querySelector('.ml-spinner').style.display = 'none';
+
+                console.error('Error:', error);
+            });
+
+        
     }
 
     button.addEventListener('click', calculate);
 
-    
+
 </script>  
