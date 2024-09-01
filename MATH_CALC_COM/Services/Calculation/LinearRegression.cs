@@ -18,7 +18,7 @@ namespace MATH_CALC_COM.Services.Calculation
             {
                 var retVals = LinearRegressionCalculator(graph.degree, x_vector, y_vector);
 
-                var chartY = Chart2D.Chart.Line<double, double, string>(x_vector, retVals, true, graph.name);
+                var chartY = Chart2D.Chart.Line<double, double, string>(retVals.x_vector, retVals.y_vector, true, graph.name);
 
                 chartList.Add(chartY);
             }
@@ -33,53 +33,39 @@ namespace MATH_CALC_COM.Services.Calculation
             return json;
         }
 
-        private double[] LinearRegressionCalculator(int degree, double[] original_x_vector, double[] original_y_vector)
+        private (double[] x_vector, double[] y_vector) LinearRegressionCalculator(int degree, double[] original_x_vector, double[] original_y_vector)
         {
             //degree 1: a0 + a1*t
             //degree 2: a0 + a1*t + a2*(t^2)
 
-            Vector<double>[] a_column_array = new Vector[degree + 1];
+            degree = 1;
 
-            for (int i = 0; i <= degree; i++)
+            Vector<double>[] a_row_array = new Vector[original_x_vector.Length];
+
+            for (int i = 0; i < original_x_vector.Length; i++)
             {
-                if (i == 0)
-                {
-                    double[] values = new double[original_x_vector.Length];
+                double[] values = new double[degree + 1];
 
-                    for (int j = 0; j < original_x_vector.Length; j++)
+                for (int j = 0; j < degree +1; j++)
+                {
+                    double value = 1.0;
+
+                    for (int k = 0; k < j; k++)
                     {
-                        values[j] = 1.0;
+                        value *= original_x_vector[i];
                     }
 
-                    Vector<double> v = Vector<double>.Build.DenseOfArray(values);
-
-                    a_column_array[i] = v;
+                    values[j] = value;
                 }
-                else
-                {
-                    double[] values = new double[original_x_vector.Length];
 
-                    for (int j = 0; j < original_x_vector.Length; j++)
-                    {
-                        double value = 1.0;
+                Vector<double> v = Vector<double>.Build.DenseOfArray(values);
 
-                        for (int k = 0; k < degree; k++)
-                        {
-                            value *= original_x_vector[j];
-                        }
-
-                        values[j] = value;
-                    }
-
-                    Vector<double> v = Vector<double>.Build.DenseOfArray(values);
-
-                    a_column_array[i] = v;
-                }
+                a_row_array[i] = v;
             }
 
-            var A = Matrix<double>.Build.DenseOfColumns(a_column_array);
+            var A = Matrix<double>.Build.DenseOfRows(a_row_array);
 
-            var QR = A.QR(MathNet.Numerics.LinearAlgebra.Factorization.QRMethod.Thin);
+            var QR = A.QR(MathNet.Numerics.LinearAlgebra.Factorization.QRMethod.Full);
 
             Vector<double> b = Vector<double>.Build.DenseOfArray(original_y_vector);
 
@@ -87,11 +73,11 @@ namespace MATH_CALC_COM.Services.Calculation
 
             var coefficients = QR.R.Solve(Q_transposed_b);
 
-            int size_of_vector = 10;
+            int segments = 1;
 
-            double[] x_vector = new double[size_of_vector + 1];
+            double[] x_vector = new double[segments + 1];
 
-            double delta_x = (original_x_vector[original_x_vector.Length - 1] - original_x_vector[0]) / (double)size_of_vector;
+            double delta_x = (original_x_vector[original_x_vector.Length - 1] - original_x_vector[0]) / (double)segments;
 
             for (int i = 0; i < x_vector.Length; i++)
             {
@@ -107,26 +93,12 @@ namespace MATH_CALC_COM.Services.Calculation
 
             double[] y_vector = new double[x_vector.Length];
 
-            for(int i = 0;  i < x_vector.Length; i++)
+            for(int i = 0; i < x_vector.Length; i++)
             {
-                double value = 0.0;
-
-                for(int j = 1; j <= degree; j++)
-                {
-                    double t_value = 1.0;
-
-                    for(int k = 1; k <= degree; k++)
-                    {
-                        t_value *= x_vector[i];
-                    }
-
-                    value += coefficients[j - 1] * t_value;
-                }
-
-                y_vector[i] = value;
+                y_vector[i] = coefficients[0] + coefficients[1] * x_vector[i]; 
             }
 
-            return y_vector;
+            return (x_vector, y_vector);
         }
 
         public string LinearRegressionTest() 
