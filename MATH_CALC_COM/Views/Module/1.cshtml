@@ -10,12 +10,16 @@
     <div style="margin-left: 10px;">Loading...</div>
 </div>
 
+<div id="ml-alert" class="alert alert-danger d-flex align-items-center d-none" role="alert">
+</div>
+
 <div id="chartDiv"></div>
 <br>
 
 <div class="d-grid gap-2 d-md-flex">
     <button id="btn-calculate" class="btn btn-primary" type="button">Calculate</button>
     <button id="btn-example-data" class="btn btn-primary" type="button">Example Data</button>
+    <button id="btn-reset-data" class="btn btn-primary" type="button">Reset Data</button>
 </div>
 <br>
 
@@ -53,9 +57,12 @@
 
     var buttonExampleData = document.getElementById('btn-example-data');
 
+    var buttonResetData = document.getElementById('btn-reset-data');
 
     function calculate() {
         //alert('Hello, World!');
+
+        document.getElementById('ml-alert').classList.add('d-none');
 
         document.querySelector('.ml-spinner').style.display = 'flex';
 
@@ -63,6 +70,13 @@
 
         if (retVal == -1) {
             document.querySelector('.ml-spinner').style.display = 'none';
+
+            const alert = document.getElementById('ml-alert');
+
+            alert.classList.remove('d-none');
+
+            alert.innerHTML = 'INSERT AT LEAST TWO VALUE-PAIRS';
+
             return;
         }
 
@@ -100,6 +114,12 @@
             .catch((error) => {
 
                 document.querySelector('.ml-spinner').style.display = 'none';
+
+                const alert = document.getElementById('ml-alert');
+
+                alert.innerHTML = 'SERVER-ERROR';
+
+                alert.classList.add('d-none');
 
                 console.error('Error:', error);
             });
@@ -180,10 +200,24 @@
         }
     }
 
+    function resetData() {
+
+        for (let i = 0; i < 5; i++) {
+            const input_x = document.getElementById(`input-x${i + 1}`);
+            const input_y = document.getElementById(`input-y${i + 1}`);
+
+            input_x.value = '';
+
+            input_y.value = '';
+        }
+    }
+
 
     buttonCalculate.addEventListener('click', calculate);
 
     buttonExampleData.addEventListener('click', exampleData);
+
+    buttonResetData.addEventListener('click', resetData);
 
 
 </script>  
