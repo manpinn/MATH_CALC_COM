@@ -61,8 +61,7 @@
 
         let retVal = getValues();
 
-        if (retVal == -1)
-        {
+        if (retVal == -1) {
             document.querySelector('.ml-spinner').style.display = 'none';
             return;
         }
@@ -99,13 +98,13 @@
                 document.querySelector('.ml-spinner').style.display = 'none';
             })
             .catch((error) => {
-          
+
                 document.querySelector('.ml-spinner').style.display = 'none';
 
                 console.error('Error:', error);
             });
 
-        
+
     }
 
     function getValues() {
@@ -113,7 +112,7 @@
         arrayX = [];
         arrayY = [];
 
-        for (let i = 0; i < 5; i++){
+        for (let i = 0; i < 5; i++) {
             const input_x = document.getElementById(`input-x${i + 1}`);
             const input_y = document.getElementById(`input-y${i + 1}`);
 
@@ -155,7 +154,30 @@
 
     function exampleData() {
 
+        for (let i = 0; i < 5; i++) {
+            const input_x = document.getElementById(`input-x${i + 1}`);
+            const input_y = document.getElementById(`input-y${i + 1}`);
 
+            let randomNumber = Math.random() * 10;
+
+            if (randomNumber > 10)
+                randomNumber = 10;
+
+            if (randomNumber < -10)
+                randomNumber = -10;
+
+            input_x.value = randomNumber;
+
+            randomNumber = Math.random() *10;
+
+            if (randomNumber > 10)
+                randomNumber = 10;
+
+            if (randomNumber < -10)
+                randomNumber = -10;
+
+            input_y.value = randomNumber;
+        }
     }
 
 
