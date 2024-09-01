@@ -78,6 +78,11 @@
 
             alert.innerHTML = 'INSERT AT LEAST TWO VALUE-PAIRS';
 
+            window.scrollTo({
+                top: 0,
+                behavior: 'smooth'
+            });
+
             return;
         }
 
@@ -126,6 +131,11 @@
                 alert.innerHTML = 'SERVER-ERROR';
 
                 alert.classList.add('d-none');
+
+                window.scrollTo({
+                    top: 0,
+                    behavior: 'smooth'
+                });
 
                 console.error('Error:', error);
             });
