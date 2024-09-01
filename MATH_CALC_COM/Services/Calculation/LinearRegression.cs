@@ -14,11 +14,13 @@ namespace MATH_CALC_COM.Services.Calculation
         {
             var chartList = new List<GenericChart>();
 
+            chartList.Add(Chart2D.Chart.Scatter<double, double, string>(X: x_vector, Y: y_vector, Name:"Values", Mode:StyleParam.Mode.Markers_Text));
+
             foreach (LinearRegressionGraph graph in graphs)
             {
                 var retVals = LinearRegressionCalculator(graph.degree, x_vector, y_vector);
 
-                var chartY = Chart2D.Chart.Line<double, double, string>(retVals.x_vector, retVals.y_vector, true, graph.name);
+                var chartY = Chart2D.Chart.Scatter<double, double, string>(X:retVals.x_vector, Y:retVals.y_vector, Name:graph.name, Mode:StyleParam.Mode.Lines_Markers_Text);
 
                 chartList.Add(chartY);
             }
