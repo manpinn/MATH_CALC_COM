@@ -4,6 +4,7 @@
 <h1 class="display-4 text-center border-bottom">Linear Regression</h1>
 
 <p>Here you can find a Visualization of Linear Regression.</p>
+<p>Simply insert data into the form or click the button 'Example Data'. After this click the button 'Calculate'.</p>
 
 <div class="ml-spinner" style="display: none; align-items: center; margin-top:10px; margin-bottom:10px;">
     <div class="spinner-grow text-secondary" role="status"></div>
@@ -104,7 +105,12 @@
                 //var chartJson = '@Html.Raw(ViewData["ChartJson"])';
                 var chartData = JSON.parse(serverData);
                 var layout = {
-                    title: 'Scroll and Zoom'
+                    title: 'Scroll and Zoom',
+                    showlegend: true,
+                    legend: {
+                        orientation: 'h',
+                        y: 1.1
+                    }
                 };
 
                 Plotly.newPlot('chartDiv', chartData.Fields[0], layout, { responsive: true, scrollZoom: true, displayModeBar: true });
