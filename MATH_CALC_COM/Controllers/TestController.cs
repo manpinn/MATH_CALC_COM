@@ -63,7 +63,7 @@ namespace MATH_CALC_COM.Controllers
 
             string ipAddressString = clientIpAddress?.ToString();
 
-            RequestData requestData = new RequestData() { datetime = DateTime.Now, url = Request.Path, ip_adress = ipAddressString };
+            RequestData requestData = new RequestData() { date_created = DateTime.UtcNow, url = Request.Path, ip_address = ipAddressString };
 
             _context.RequestData.Add(requestData);
 

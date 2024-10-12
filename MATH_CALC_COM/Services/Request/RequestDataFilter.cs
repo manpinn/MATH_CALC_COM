@@ -43,7 +43,7 @@ namespace MATH_CALC_COM.Services.Request
                         await next();
                     }
 
-                    RequestData requestData = new RequestData() { datetime = DateTime.Now, url = context.HttpContext.Request.Path, ip_adress = ipAddressString ?? string.Empty };
+                    RequestData requestData = new RequestData() { date_created = DateTime.UtcNow, url = context.HttpContext.Request.Path, ip_address = ipAddressString ?? string.Empty };
 
                     dbContext.RequestData.Add(requestData);
 

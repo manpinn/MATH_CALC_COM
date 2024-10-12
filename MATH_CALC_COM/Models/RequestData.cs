@@ -11,10 +11,10 @@ namespace MATH_CALC_COM.Models
         [Key]
         public int id {  get; set; }
 
-        public DateTime datetime { get; set; }
+        public DateTime date_created { get; set; }
         
         public string url { get; set; }
         
-        public string ip_adress { get; set; }
+        public string ip_address { get; set; }
     }
 }
