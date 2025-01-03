@@ -18,13 +18,16 @@ builder.Services.AddControllersWithViews().AddRazorRuntimeCompilation();
 builder.Services.AddDbContext<RequestDataContext>(options =>
     options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")));
 
-builder.Services.AddControllers(options =>
-{
-    options.Filters.Add<RequestDataFilter>();
-});
+//deactivated Database
+//builder.Services.AddControllers(options =>
+//{
+//    options.Filters.Add<RequestDataFilter>();
+//});
 
 builder.Services.AddLogging();
-builder.Services.AddSingleton<RequestDataFilter>();
+
+//deactivated Database
+//builder.Services.AddSingleton<RequestDataFilter>();
 
 builder.Services.AddAuthentication(CertificateAuthenticationDefaults.AuthenticationScheme)
     .AddCertificate();
