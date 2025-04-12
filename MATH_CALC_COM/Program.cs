@@ -6,7 +6,11 @@ using Microsoft.AspNetCore.Authentication.Certificate;
 using Microsoft.EntityFrameworkCore;
 using System.Security.Cryptography.X509Certificates;
 
-var builder = WebApplication.CreateBuilder(args);
+var builder = WebApplication.CreateBuilder(new WebApplicationOptions
+{
+    WebRootPath = "/opt/MEICOTI_LABS/MAT_CALC_COM/wwwroot",
+    ContentRootPath = "/opt/MEICOTI_LABS/MAT_CALC_COM"
+});
 
 // Add services to the container.
 builder.Services.AddControllersWithViews().AddRazorRuntimeCompilation();
@@ -37,12 +41,18 @@ builder.Logging.ClearProviders();
 builder.Logging.AddConsole();
 builder.Logging.AddDebug();
 
-builder.Configuration.AddJsonFile("appsettings.json", optional: false, reloadOnChange: true);
+builder.Configuration
+    .SetBasePath("/opt/MEICOTI_LABS/MAT_CALC_COM")
+    .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true);
 
-builder.Configuration.AddJsonFile($"appsettings.{builder.Environment.EnvironmentName}.json", optional: true, reloadOnChange: true);
+builder.Configuration
+    .SetBasePath("/opt/MEICOTI_LABS/MAT_CALC_COM")
+    .AddJsonFile($"appsettings.{builder.Environment.EnvironmentName}.json", optional: true, reloadOnChange: true);
 
 
-builder.WebHost.ConfigureKestrel(serverOptions =>
+builder.WebHost
+    .UseUrls("http://0.0.0.0:5064")
+    .ConfigureKestrel(serverOptions =>
 {
     if (builder.Environment.IsProduction())
     {
