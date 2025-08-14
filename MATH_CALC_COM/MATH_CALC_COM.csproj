@@ -7,22 +7,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Content Remove="Views\Test\Article.cshtml" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <UpToDateCheckInput Remove="Views\Test\Article.cshtml" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <_ContentIncludedByDefault Remove="Views\Test\Article.cshtml" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <None Include="Views\Test\Article.cshtml" />
-  </ItemGroup>
-
-  <ItemGroup>
     <PackageReference Include="Azure.Identity" Version="1.12.0" />
     <PackageReference Include="DevExpress.Xpo" Version="24.1.6" />
     <PackageReference Include="MathNet.Numerics" Version="5.0.0" />
