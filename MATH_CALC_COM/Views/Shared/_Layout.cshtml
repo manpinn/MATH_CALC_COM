@@ -23,26 +23,42 @@
                 <button class="btn btn-outline-light" type="submit">Search</button>
             </form>
         </div> *@
+        <div class="navbar-ml-right">
+            <a href="https://github.com/manpinn/MATH_CALC_COM" target="_blank" class="github-link">
+                <img src="https://github.githubassets.com/images/modules/logos_page/GitHub-Mark.png" alt="GitHub" width="30" height="30" />
+            </a>
+        </div>
     </div>
 
     <div class="ml-sidebar-content">
         <div id="ml-sidebar" class="ml-sidebar">
-            <!-- content of the sidebar -->
-            <p style="margin-top:5px">@Html.ActionLink("Home", "Index", "Home", null, new { @class = "btn btn-light btn-lg ml-sidebar-button" })</p>
-            <p>@Html.ActionLink("Modules", "Index", "Module", null, new { @class = "btn btn-light btn-lg ml-sidebar-button" })</p>
-            <p>@Html.ActionLink("About", "About", "Home", null, new { @class = "btn btn-light btn-lg ml-sidebar-button" })</p>
+            <div class="ml-sidebar-scroll">
+                <!-- content of the sidebar -->
+                <p style="color:lightgray; margin-left:10px; margin-top:10px;">Tools</p>
+                <p style="margin-top:5px">@Html.ActionLink("Home", "Index", "Home", null, new { @class = "btn btn-light btn-lg ml-sidebar-button" })</p>
+                <p>@Html.ActionLink("Modules", "Index", "Module", null, new { @class = "btn btn-light btn-lg ml-sidebar-button" })</p>
+                <p style="height:2px; background-color:lightgray; margin-left:10px; margin-right:10px;"></p>
+                <p style="color:lightgray; margin-left:10px;">Information</p>
+                <p>@Html.ActionLink("About", "About", "Home", null, new { @class = "btn btn-light btn-lg ml-sidebar-button" })</p>
+            </div>
         </div>
         <div class="container-ml" style="margin-left:10px; margin-right:10px;">
-            <main role="main" class="pb-3">
-                @RenderBody()
-            </main>
-            <footer class="d-flex flex-wrap justify-content-between align-items-center py-3 my-4 border-top">
-                <div class="col-md-4 d-flex align-items-center">
-                    <span class="mb-3 mb-md-0 text-body-secondary">© @DateTime.Now.Year Mario Kozlovac</span>
-                </div>
-
-
-            </footer>
+            <div class="ml-main">
+                <main role="main" class="pb-3">
+                    @RenderBody()
+                </main>
+                <footer class="d-flex flex-wrap justify-content-between align-items-center py-3 my-4 border-top" style="padding-bottom: 4rem !important;">
+                    <div class="col-md-5 d-flex align-items-center">
+                        <span class="mb-3 mb-md-0 text-primary" style="margin-right:20px;">© @DateTime.Now.Year Mario Kozlovac</span>
+                        <span class="mb-3 mb-md-0" style="margin-right:20px;">
+                            @Html.ActionLink("About", "About", "Home", null, new { @class = "icon-link icon-link-hover bi-clipboard" })
+                        </span>
+                        <span class="mb-3 mb-md-0">
+                            @Html.ActionLink("Legal", "Legal", "Home", null, new { @class = "icon-link icon-link-hover bi-clipboard" })
+                        </span>
+                    </div>
+                </footer>
+            </div>
         </div>
 
 
@@ -53,18 +69,26 @@
     <script>
         const mediaQuery = window.matchMedia('(max-width: 1000px)');
 
+        const main = document.querySelector('.container-ml');
+
         const sidebar = document.querySelector('.ml-sidebar');
 
         function showSidebar() {
-            sidebar.style.width = '250px'; // or any desired width
+            sidebar.style.width = '200px'; // or any desired width
             sidebar.style.opacity = '1';
             sidebar.classList.add('active');
+
+            main.style.marginLeft = '210px';
+            main.classList.add('active');
         }
 
         function hideSidebar() {
             sidebar.style.width = '0px';
             sidebar.style.opacity = '0';
             sidebar.classList.remove('active');
+
+            main.style.marginLeft = '10px';
+            main.classList.remove('active');
         }
 
         function handleMediaQueryChange(event) {
@@ -74,12 +98,19 @@
                 sidebar.style.opacity = '0';
                 sidebar.style.transition = 'width 0.3s ease-in-out, opacity 0.3s ease-in-out';
                 sidebar.classList.remove('active');
+
+                main.style.marginLeft = '10px';
+                main.style.transition = 'margin-left ease 0.3s';
+                main.classList.remove('active');
             } else {
                 // Media query does not match (screen width is greater than 1000px)
                 sidebar.style.width = '';
                 sidebar.style.opacity = '';
                 sidebar.style.transition = '';
                 sidebar.classList.add('active');
+
+                main.style.marginLeft = '210px';
+                main.classList.remove('active');
             }
         }
 

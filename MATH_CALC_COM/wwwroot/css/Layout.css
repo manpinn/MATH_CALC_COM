@@ -30,6 +30,7 @@ body, html {
 .container-ml {
     flex: 1; /* Take remaining space */
     padding-top: 60px;
+    transition: margin-left ease 0.3s;
 }
 
 .navbar-ml-left {
@@ -80,13 +81,23 @@ body, html {
 
 
 .ml-sidebar {
-    width: 250px;
+    width: 200px;
     /*background: #333;*/
     background-color: darkslategrey;
     color: white;
-    padding-top: 60px;
     opacity: 1;
     transition: width 0.3s ease-in-out, opacity 0.3s ease-in-out;
+    position: fixed;
+    height: 100%;
+    padding-top: 50px;
+    display: flex;
+    flex-direction: column;
+    z-index: 999;
+}
+
+.ml-sidebar-scroll {
+    flex: 1;
+    overflow-y: auto;
 }
 
 .ml-sidebar-content {
@@ -106,6 +117,11 @@ body, html {
         opacity: 0;
     }
 
+    .container-ml {
+        margin-left: 10px;
+        transition: margin-left ease 0.3s;
+    }
+
     .navbar-ml-right-search:focus {
         width: 100px;
         transition: width 0.3s ease-in-out;
@@ -114,4 +130,10 @@ body, html {
     .navbar-ml-right-search:not(:focus) {
         transition: width 0.3s ease-in-out;
     }
+}
+
+.ml-main {
+    max-width: 800px;
+    margin: 0 auto;
+    width: 100%;
 }
