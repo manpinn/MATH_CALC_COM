@@ -58,21 +58,6 @@ builder.Configuration
     .AddJsonFile($"appsettings.{builder.Environment.EnvironmentName}.json", optional: true, reloadOnChange: true);
 */
 
-builder.WebHost
-    .UseUrls("http://0.0.0.0:5064")
-    .ConfigureKestrel(serverOptions =>
-{
-    if (builder.Environment.IsProduction())
-    {
-        serverOptions.ConfigureHttpsDefaults(httpsOptions =>
-        {
-            httpsOptions.ServerCertificate = new X509Certificate2(
-                builder.Configuration["Kestrel:Endpoints:Https:Certificate:Path"],
-                builder.Configuration["Kestrel:Endpoints:Https:Certificate:Password"]);
-        });
-    }
-});
-
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
