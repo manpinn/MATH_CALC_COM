@@ -4,60 +4,65 @@ using MATH_CALC_COM.Services.Request;
 using MathNet.Numerics;
 using Microsoft.AspNetCore.Authentication.Certificate;
 using Microsoft.EntityFrameworkCore;
+using System.Runtime.InteropServices;
 using System.Security.Cryptography.X509Certificates;
 
-//var builder = WebApplication.CreateBuilder(args);
+WebApplicationBuilder builder = null;
+
+    if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
+    {
+        builder = WebApplication.CreateBuilder(args);
+    }
+    else if (RuntimeInformation.IsOSPlatform(OSPlatform.Linux))
+    {
+        builder = WebApplication.CreateBuilder(new WebApplicationOptions
+        {
+            WebRootPath = "/opt/REGRESIK/MATH_CALC_COM/wwwroot",
+            ContentRootPath = "/opt/REGRESIK/MATH_CALC_COM"
+        });
+    }
 
 
-//linux
+    // Add services to the container.
+    builder.Services.AddControllersWithViews().AddRazorRuntimeCompilation();
 
-var builder = WebApplication.CreateBuilder(new WebApplicationOptions
-{
-    WebRootPath = "/opt/REGRESIK/MATH_CALC_COM/wwwroot",
-    ContentRootPath = "/opt/REGRESIK/MATH_CALC_COM"
-});
+    // Add services to the container.
+    //builder.Services.AddDbContext<RequestDataContext>(options =>
+    //    options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")).EnableSensitiveDataLogging());
+
+    builder.Services.AddDbContext<RequestDataContext>(options =>
+        options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")));
+
+    //deactivated Database
+    //builder.Services.AddControllers(options =>
+    //{
+    //    options.Filters.Add<RequestDataFilter>();
+    //});
+
+    builder.Services.AddLogging();
+
+    //deactivated Database
+    //builder.Services.AddSingleton<RequestDataFilter>();
+
+    builder.Services.AddAuthentication(CertificateAuthenticationDefaults.AuthenticationScheme)
+        .AddCertificate();
+
+    // Configure logging
+    builder.Logging.ClearProviders();
+    builder.Logging.AddConsole();
+    builder.Logging.AddDebug();
 
 
-// Add services to the container.
-builder.Services.AddControllersWithViews().AddRazorRuntimeCompilation();
+    if (RuntimeInformation.IsOSPlatform(OSPlatform.Linux))
+    {
+        builder.Configuration
+        .SetBasePath("/opt/REGRESIK/MATH_CALC_COM")
+        .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true);
 
-// Add services to the container.
-//builder.Services.AddDbContext<RequestDataContext>(options =>
-//    options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")).EnableSensitiveDataLogging());
-
-builder.Services.AddDbContext<RequestDataContext>(options =>
-    options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")));
-
-//deactivated Database
-//builder.Services.AddControllers(options =>
-//{
-//    options.Filters.Add<RequestDataFilter>();
-//});
-
-builder.Services.AddLogging();
-
-//deactivated Database
-//builder.Services.AddSingleton<RequestDataFilter>();
-
-builder.Services.AddAuthentication(CertificateAuthenticationDefaults.AuthenticationScheme)
-    .AddCertificate();
-
-// Configure logging
-builder.Logging.ClearProviders();
-builder.Logging.AddConsole();
-builder.Logging.AddDebug();
-
-//linux
-
-builder.Configuration
-    .SetBasePath("/opt/REGRESIK/MATH_CALC_COM")
-    .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true);
-
-builder.Configuration
-    .SetBasePath("/opt/REGRESIK/MATH_CALC_COM")
-    .AddJsonFile($"appsettings.{builder.Environment.EnvironmentName}.json", optional: true, reloadOnChange: true);
-
-builder.WebHost.UseUrls("http://localhost:5064");
+        builder.Configuration
+        .SetBasePath("/opt/REGRESIK/MATH_CALC_COM")
+        .AddJsonFile($"appsettings.{builder.Environment.EnvironmentName}.json", optional: true, reloadOnChange: true);
+    }
 
 var app = builder.Build();
 
