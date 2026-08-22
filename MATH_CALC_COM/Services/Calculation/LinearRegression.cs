@@ -1,10 +1,12 @@
-﻿using Plotly.NET;
+﻿using DevExpress.Utils;
+using MathNet.Numerics.LinearAlgebra;
+using MathNet.Numerics.LinearAlgebra.Double;
+using Plotly.NET;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using static Plotly.NET.StyleParam.Range;
-using MathNet.Numerics.LinearAlgebra;
-using MathNet.Numerics.LinearAlgebra.Double;
+using static Plotly.NET.StyleParam.TextAngle;
 
 namespace MATH_CALC_COM.Services.Calculation
 {
@@ -14,13 +16,13 @@ namespace MATH_CALC_COM.Services.Calculation
         {
             var chartList = new List<GenericChart>();
 
-            chartList.Add(Chart2D.Chart.Scatter<double, double, string>(X: x_vector, Y: y_vector, Name:"Values", Mode:StyleParam.Mode.Markers_Text));
+            chartList.Add(Chart2D.Chart.Scatter<double, double, string>(X: x_vector, Y: y_vector, Name: "Values", Mode: StyleParam.Mode.Markers_Text));
 
             foreach (LinearRegressionGraph graph in graphs)
             {
                 var retVals = LinearRegressionCalculator(graph.degree, x_vector, y_vector);
 
-                var chartY = Chart2D.Chart.Scatter<double, double, string>(X:retVals.x_vector, Y:retVals.y_vector, Name:graph.name, Mode:StyleParam.Mode.Lines_Markers_Text);
+                var chartY = Chart2D.Chart.Scatter<double, double, string>(X: retVals.x_vector, Y: retVals.y_vector, Name: graph.name, Mode: StyleParam.Mode.Lines_Markers_Text);
 
                 chartList.Add(chartY);
             }
@@ -39,8 +41,7 @@ namespace MATH_CALC_COM.Services.Calculation
         {
             //degree 1: a0 + a1*t
             //degree 2: a0 + a1*t + a2*(t^2)
-
-            degree = 1;
+            //degree etc
 
             Vector<double>[] a_row_array = new Vector[original_x_vector.Length];
 
@@ -48,7 +49,7 @@ namespace MATH_CALC_COM.Services.Calculation
             {
                 double[] values = new double[degree + 1];
 
-                for (int j = 0; j < degree +1; j++)
+                for (int j = 0; j < degree + 1; j++)
                 {
                     double value = 1.0;
 
@@ -75,7 +76,7 @@ namespace MATH_CALC_COM.Services.Calculation
 
             var coefficients = QR.R.Solve(Q_transposed_b);
 
-            int segments = 1;
+            int segments = 10;
 
             double[] x_vector = new double[segments + 1];
 
@@ -83,7 +84,7 @@ namespace MATH_CALC_COM.Services.Calculation
 
             for (int i = 0; i < x_vector.Length; i++)
             {
-                if(i == 0)
+                if (i == 0)
                 {
                     x_vector[i] = original_x_vector[0];
                 }
@@ -93,30 +94,110 @@ namespace MATH_CALC_COM.Services.Calculation
                 }
             }
 
+            //degree 1: a0 + a1*t
+            //degree 2: a0 + a1*t + a2*(t^2)
+            //degree etc
+
             double[] y_vector = new double[x_vector.Length];
 
-            for(int i = 0; i < x_vector.Length; i++)
+            for (int i = 0; i < x_vector.Length; i++)
             {
-                y_vector[i] = coefficients[0] + coefficients[1] * x_vector[i]; 
+                for (int j = 0; j <= degree; j++)
+                {
+                    double term = coefficients[j];
+
+                    for (int k = 0; k < j; k++)
+                    {
+                        term *= x_vector[i];
+                    }
+
+                    y_vector[i] += term;
+                }
             }
 
             return (x_vector, y_vector);
         }
 
-        public string LinearRegressionTest() 
-        {
-            
-            List<int> xValues = Enumerable.Range(1, 500).ToList();
-            List<float> y1Values = getY1Values(); 
+        //private (double[] x_vector, double[] y_vector) LinearRegressioPlaneCalculator(
+        //    PlaneVector[] planeVectors)
+        //{
+        //    //z = ax + by + c
 
-            
+        //    V Vector<double> [] a_row_array = new Vector[original_x_vector.Length];
+
+        //    for (int i = 0; i < original_x_vector.Length; i++)
+        //    {
+        //        double[] values = new double[degree + 1];
+
+        //        for (int j = 0; j < degree + 1; j++)
+        //        {
+        //            double value = 1.0;
+
+        //            for (int k = 0; k < j; k++)
+        //            {
+        //                value *= original_x_vector[i];
+        //            }
+
+        //            values[j] = value;
+        //        }
+
+        //        Vector<double> v = Vector<double>.Build.DenseOfArray(values);
+
+        //        a_row_array[i] = v;
+        //    }
+
+        //    var A = Matrix<double>.Build.DenseOfRows(a_row_array);
+
+        //    var QR = A.QR(MathNet.Numerics.LinearAlgebra.Factorization.QRMethod.Full);
+
+        //    Vector<double> b = Vector<double>.Build.DenseOfArray(original_y_vector);
+
+        //    var Q_transposed_b = QR.Q.Transpose().Multiply(b);
+
+        //    var coefficients = QR.R.Solve(Q_transposed_b);
+
+        //    int segments = 1;
+
+        //    double[] x_vector = new double[segments + 1];
+
+        //    double delta_x = (original_x_vector[original_x_vector.Length - 1] - original_x_vector[0]) / (double)segments;
+
+        //    for (int i = 0; i < x_vector.Length; i++)
+        //    {
+        //        if (i == 0)
+        //        {
+        //            x_vector[i] = original_x_vector[0];
+        //        }
+        //        else
+        //        {
+        //            x_vector[i] = x_vector[i - 1] + delta_x;
+        //        }
+        //    }
+
+        //    double[] y_vector = new double[x_vector.Length];
+
+        //    for (int i = 0; i < x_vector.Length; i++)
+        //    {
+        //        y_vector[i] = coefficients[0] + coefficients[1] * x_vector[i];
+        //    }
+
+        //    return (x_vector, y_vector);
+        //}
+
+        public string LinearRegressionTest()
+        {
+
+            List<int> xValues = Enumerable.Range(1, 500).ToList();
+            List<float> y1Values = getY1Values();
+
+
             var chartY1 = Chart2D.Chart.Line<int, float, string>(xValues, y1Values, true, "MKO");
 
-            
+
             var chartList = new List<GenericChart>();
             chartList.Add(chartY1);
 
-            
+
             var combinedChart = Chart.Combine(chartList);
 
             string json = Newtonsoft.Json.JsonConvert.SerializeObject(combinedChart, new Newtonsoft.Json.JsonSerializerSettings
@@ -140,7 +221,7 @@ namespace MATH_CALC_COM.Services.Calculation
 
     }
 
-    public class LinearRegressionGraph 
+    public class LinearRegressionGraph
     {
         public string name { get; set; }
 
