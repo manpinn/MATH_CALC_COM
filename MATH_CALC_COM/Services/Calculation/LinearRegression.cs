@@ -76,7 +76,7 @@ namespace MATH_CALC_COM.Services.Calculation
 
             var coefficients = QR.R.Solve(Q_transposed_b);
 
-            int segments = 10;
+            int segments = 20;
 
             double[] x_vector = new double[segments + 1];
 

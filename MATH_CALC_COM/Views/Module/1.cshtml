@@ -25,7 +25,10 @@
     <button id="btn-reset-data" class="btn btn-primary" type="button">Reset Data</button>
 </div>
 <br>
-
+<div class="input-group mb-3">
+    <span class="input-group-text">degree</span>
+    <input aria-label="input-degree" class="form-control" id="input-degree" name="input-degree" type="number" step="1">
+</div>
 @for (int i = 1; i <= 5; i++)
 {
     <div class="input-group mb-3">
@@ -39,6 +42,8 @@
 
 <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
 <script type="text/javascript">
+
+    document.getElementById('input-degree').value = 1;
 
     class LinearRegressionGraph {
         constructor(name, degree) {
@@ -73,6 +78,8 @@
 
         let retVal = getValues();
 
+        const degree = document.getElementById('input-degree').value;
+
         if (retVal == -1) {
             document.querySelector('.ml-spinner').style.display = 'none';
 
@@ -90,7 +97,7 @@
             return;
         }
 
-        const graph1 = new LinearRegressionGraph("Regression Line", 2);
+        const graph1 = new LinearRegressionGraph("Regression Line", degree);
         //const graph2 = new LinearRegressionGraph("Graph 2", 5);
 
         const model = new AJAX_LinearRegression_Model([graph1], arrayX, arrayY);
