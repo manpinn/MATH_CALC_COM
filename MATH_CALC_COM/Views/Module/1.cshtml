@@ -27,7 +27,7 @@
 <br>
 <div class="input-group mb-3">
     <span class="input-group-text">degree</span>
-    <input aria-label="input-degree" class="form-control" id="input-degree" name="input-degree" type="number" step="1">
+    <input aria-label="input-degree" class="form-control" id="input-degree" name="input-degree" min="0" max="4" type="number" step="1">
 </div>
 @for (int i = 1; i <= 5; i++)
 {
@@ -37,6 +37,35 @@
         <input aria-label="y@(i)" class="form-control" id="input-y@(i)" name="input-y@(i)" type="number" step="0.01">
     </div>
 }
+
+<div class="polynomial-definition">
+    <h3>Polynomial Definition</h3>
+
+    <p>
+        A polynomial of degree <strong>n</strong> is defined as:
+    </p>
+
+    <pre>
+f(x) = a₀ + a₁·x + a₂·x² + a₃·x³ + a₄·x⁴
+    </pre>
+
+    <p>
+        Where:
+    </p>
+
+    <ul>
+        <li><strong>a₀</strong> – constant term</li>
+        <li><strong>a₁</strong> – linear coefficient</li>
+        <li><strong>a₂</strong> – quadratic coefficient</li>
+        <li><strong>a₃</strong> – cubic coefficient</li>
+        <li><strong>a₄</strong> – quartic coefficient</li>
+    </ul>
+
+    <p>
+        Valid polynomial degrees: <strong>0 to 4</strong>.
+    </p>
+</div>
+
 
 
 
