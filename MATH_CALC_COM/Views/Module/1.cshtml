@@ -43,7 +43,7 @@
     <h3>Polynomial Definition</h3>
 
     <p>
-        A polynomial of degree <strong>n</strong> is defined as:
+        A polynomial of degree <strong>n</strong> is defined as fitting curve:
     </p>
 
     <pre>
@@ -51,21 +51,17 @@ f(x) = a₀ + a₁·x + a₂·x² + a₃·x³ + a₄·x⁴
     </pre>
 
     <p>
-        Where:
-    </p>
-
-    <ul>
-        <li><strong>a₀</strong> – constant term</li>
-        <li><strong>a₁</strong> – linear coefficient</li>
-        <li><strong>a₂</strong> – quadratic coefficient</li>
-        <li><strong>a₃</strong> – cubic coefficient</li>
-        <li><strong>a₄</strong> – quartic coefficient</li>
-    </ul>
-
-    <p>
         Valid polynomial degrees: <strong>0 to 4</strong>.
     </p>
+    <p>
+        <a href="https://en.wikipedia.org/wiki/Linear_regression target="_blank" rel="noopener">Wikipedia: Linear Regression</a>
+    </p>
+
+    <p>To calculate the fittiing curve QR-Decomposition is used.</p>
+
+    <a href="https://en.wikipedia.org/wiki/QR_decomposition" target="_blank" rel="noopener">Wikipedia: QR-Decomposition</a>
 </div>
+
 
 
 
@@ -245,7 +241,7 @@ f(x) = a₀ + a₁·x + a₂·x² + a₃·x³ + a₄·x⁴
 
             input_x.value = randomNumber;
 
-            randomNumber = Math.random() *10;
+            randomNumber = Math.random() * 10;
 
             if (randomNumber > 10)
                 randomNumber = 10;
