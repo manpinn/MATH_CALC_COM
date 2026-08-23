@@ -1,12 +1,16 @@
 ﻿using DevExpress.Utils;
 using MathNet.Numerics.LinearAlgebra;
 using MathNet.Numerics.LinearAlgebra.Double;
+using Microsoft.FSharp.Core;
 using Plotly.NET;
+using Plotly.NET.LayoutObjects;
+using Plotly.NET.TraceObjects;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using static Plotly.NET.StyleParam.Range;
 using static Plotly.NET.StyleParam.TextAngle;
+
 
 namespace MATH_CALC_COM.Services.Calculation
 {
@@ -20,7 +24,7 @@ namespace MATH_CALC_COM.Services.Calculation
 
             foreach (LinearRegressionGraph graph in graphs)
             {
-                var retVals = LinearRegressionCalculator(graph.degree, x_vector, y_vector);
+                var retVals = LinearRegressionCalculator(graph.degree ?? 1, x_vector, y_vector);
 
                 var chartY = Chart2D.Chart.Scatter<double, double, string>(X: retVals.x_vector, Y: retVals.y_vector, Name: graph.name, Mode: StyleParam.Mode.Lines_Markers_Text);
 
@@ -118,71 +122,158 @@ namespace MATH_CALC_COM.Services.Calculation
             return (x_vector, y_vector);
         }
 
-        //private (double[] x_vector, double[] y_vector) LinearRegressioPlaneCalculator(
-        //    PlaneVector[] planeVectors)
-        //{
-        //    //z = ax + by + c
+        private (double a, double b, double c) LinearRegressioPlaneCalculator(
+            double offset,
+            double[] original_x_vector,
+            double[] original_y_vector,
+            double[] original_z_vector)
+        {
+            //z = ax + by + c
 
-        //    V Vector<double> [] a_row_array = new Vector[original_x_vector.Length];
+            Vector<double>[] a_row_array = new Vector[3];
 
-        //    for (int i = 0; i < original_x_vector.Length; i++)
-        //    {
-        //        double[] values = new double[degree + 1];
+            Vector<double> v_x = Vector<double>.Build.DenseOfArray(original_x_vector);
 
-        //        for (int j = 0; j < degree + 1; j++)
-        //        {
-        //            double value = 1.0;
+            a_row_array[0] = v_x;
 
-        //            for (int k = 0; k < j; k++)
-        //            {
-        //                value *= original_x_vector[i];
-        //            }
+            Vector<double> v_y = Vector<double>.Build.DenseOfArray(original_y_vector);
 
-        //            values[j] = value;
-        //        }
+            a_row_array[1] = v_y;
 
-        //        Vector<double> v = Vector<double>.Build.DenseOfArray(values);
+            double[] values_1 = new double[original_x_vector.Length];
 
-        //        a_row_array[i] = v;
-        //    }
+            for (int j = 0; j < original_x_vector.Length; j++)
+            {
+                values_1[j] = 1.0;
+            }
 
-        //    var A = Matrix<double>.Build.DenseOfRows(a_row_array);
+            Vector<double> v_1 = Vector<double>.Build.DenseOfArray(values_1);
 
-        //    var QR = A.QR(MathNet.Numerics.LinearAlgebra.Factorization.QRMethod.Full);
+            a_row_array[2] = v_1;
 
-        //    Vector<double> b = Vector<double>.Build.DenseOfArray(original_y_vector);
+            var A = Matrix<double>.Build.DenseOfColumns(a_row_array);
 
-        //    var Q_transposed_b = QR.Q.Transpose().Multiply(b);
+            var QR = A.QR(MathNet.Numerics.LinearAlgebra.Factorization.QRMethod.Full);
 
-        //    var coefficients = QR.R.Solve(Q_transposed_b);
+            Vector<double> b = Vector<double>.Build.DenseOfArray(original_z_vector);
 
-        //    int segments = 1;
+            var Q_transposed_b = QR.Q.Transpose().Multiply(b);
 
-        //    double[] x_vector = new double[segments + 1];
+            var coefficients = QR.R.Solve(Q_transposed_b);
 
-        //    double delta_x = (original_x_vector[original_x_vector.Length - 1] - original_x_vector[0]) / (double)segments;
+            double a = coefficients[0];
+            double b_val = coefficients[1];
+            double c = coefficients[2] + offset;
 
-        //    for (int i = 0; i < x_vector.Length; i++)
-        //    {
-        //        if (i == 0)
-        //        {
-        //            x_vector[i] = original_x_vector[0];
-        //        }
-        //        else
-        //        {
-        //            x_vector[i] = x_vector[i - 1] + delta_x;
-        //        }
-        //    }
+            return (a, b_val, c);
+        }
 
-        //    double[] y_vector = new double[x_vector.Length];
+        private (double[] xs, double[] ys, double[] zs) CreatePlaneMesh(
+    double a, double b, double c,
+    double[] x_vector,
+    double[] y_vector,
+    int resolution = 20)
+        {
+            double x_min = x_vector.Min();
+            double x_max = x_vector.Max();
+            double y_min = y_vector.Min();
+            double y_max = y_vector.Max();
 
-        //    for (int i = 0; i < x_vector.Length; i++)
-        //    {
-        //        y_vector[i] = coefficients[0] + coefficients[1] * x_vector[i];
-        //    }
+            double[] xs = new double[resolution * resolution];
+            double[] ys = new double[resolution * resolution];
+            double[] zs = new double[resolution * resolution];
 
-        //    return (x_vector, y_vector);
-        //}
+            int index = 0;
+
+            for (int i = 0; i < resolution; i++)
+            {
+                double x = x_min + (x_max - x_min) * (i / (double)(resolution - 1));
+
+                for (int j = 0; j < resolution; j++)
+                {
+                    double y = y_min + (y_max - y_min) * (j / (double)(resolution - 1));
+
+                    xs[index] = x;
+                    ys[index] = y;
+                    zs[index] = a * x + b * y + c;
+
+                    index++;
+                }
+            }
+
+            return (xs, ys, zs);
+        }
+
+
+        public string LinearRegressionPlanePlotter(
+            double offset,
+            LinearRegressionGraph[] graphs,
+            double[] x_vector,
+            double[] y_vector,
+            double[] z_vector
+        )
+        {
+            var chartList = new List<GenericChart>();
+
+            // 1. Add Original 3D Points to the chart list
+            var scatter3D = Chart3D.Chart.Scatter3D<double, double, double, string>(
+               x_vector,
+               y_vector,
+               z_vector,
+               StyleParam.Mode.Markers,
+               Name: "Original Points"
+            );
+            chartList.Add(scatter3D);
+
+            // 2. Calculate Plane
+            var (a, b, c) = LinearRegressioPlaneCalculator(offset, x_vector, y_vector, z_vector);
+
+            // 3. Generate Mesh
+            var (xs, ys, zs) = CreatePlaneMesh(a, b, c, x_vector, y_vector);
+
+            // Convert 1D coordinate arrays to 2D matrices for the Surface plot
+            int resolution = 20; // Matches default resolution in CreatePlaneMesh
+            double[][] zMatrix = Convert1DTo2DArray(zs, resolution, resolution);
+            double[] xUnique = xs.Distinct().OrderBy(val => val).ToArray();
+            double[] yUnique = ys.Distinct().OrderBy(val => val).ToArray();
+
+            // 4. Plot Surface using base Trace
+            var surfaceTrace = new Plotly.NET.Trace("surface");
+            surfaceTrace.SetValue("z", zMatrix);
+            surfaceTrace.SetValue("x", xUnique);
+            surfaceTrace.SetValue("y", yUnique);
+            surfaceTrace.SetValue("name", "Regression Plane");
+
+            var surfaceChart = GenericChart.ofTraceObject(true, surfaceTrace);
+            chartList.Add(surfaceChart);
+
+            // 5. Combine and Serialize
+            var combinedChart = Chart.Combine(chartList);
+
+            string json = Newtonsoft.Json.JsonConvert.SerializeObject(
+                combinedChart,
+                new Newtonsoft.Json.JsonSerializerSettings
+                {
+                    ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore
+                }
+            );
+
+            return json;
+        }
+
+        private double[][] Convert1DTo2DArray(double[] flatArray, int rows, int cols)
+        {
+            double[][] result = new double[rows][];
+            for (int i = 0; i < rows; i++)
+            {
+                result[i] = new double[cols];
+                for (int j = 0; j < cols; j++)
+                {
+                    result[i][j] = flatArray[i * cols + j];
+                }
+            }
+            return result;
+        }
 
         public string LinearRegressionTest()
         {
@@ -225,6 +316,6 @@ namespace MATH_CALC_COM.Services.Calculation
     {
         public string name { get; set; }
 
-        public int degree { get; set; }
+        public int? degree { get; set; }
     }
 }

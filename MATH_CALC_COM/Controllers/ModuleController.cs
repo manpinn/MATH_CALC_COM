@@ -16,7 +16,7 @@ namespace MATH_CALC_COM.Controllers
         {
             string view_name = string.Empty;
 
-            if(module_name == "LinearRegression")
+            if (module_name == "LinearRegression")
             {
                 view_name = "1";
 
@@ -41,7 +41,25 @@ namespace MATH_CALC_COM.Controllers
             return Json(json);
         }
 
-        public class AJAX_LinearRegression_Model 
+
+        [HttpPost]
+        [Route("/Module/AJAX/LinearRegressionPlane")]
+        public ActionResult AJAX_LinearRegressionPlane([FromBody] AJAX_LinearRegressionPlane_Model model)
+        {
+            LinearRegression calculator = new LinearRegression();
+
+            string jsonResult = calculator.LinearRegressionPlanePlotter(
+     offset: 0.0, // Or model.offset if it exists in your model
+     graphs: model.graphs,
+     x_vector: model.x_vector,
+     y_vector: model.y_vector,
+     z_vector: model.z_vector
+ );
+
+            return Json(jsonResult);
+        }
+
+        public class AJAX_LinearRegression_Model
         {
             public LinearRegressionGraph[] graphs { get; set; }
 
@@ -50,6 +68,17 @@ namespace MATH_CALC_COM.Controllers
             public double[] y_vector { get; set; }
         }
 
-        
+        public class AJAX_LinearRegressionPlane_Model
+        {
+            public LinearRegressionGraph[] graphs { get; set; }
+
+            public double[] x_vector { get; set; }
+
+            public double[] y_vector { get; set; }
+
+            public double[] z_vector { get; set; }
+        }
+
+
     }
 }
