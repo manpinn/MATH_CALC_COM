@@ -15,7 +15,7 @@ namespace MATH_CALC_COM.Controllers
 
         public IActionResult Index()
         {
-            return View();
+            return RedirectToAction("LinearRegression","Module");
         }
 
         public IActionResult About()
