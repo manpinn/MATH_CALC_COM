@@ -7,66 +7,139 @@
 
 <p>Here you can find a Visualization of Linear Regression.</p>
 <p>Simply insert data into the form or click the button 'Example Data'. After this click the button 'Calculate'.</p>
-<p>Increase the degree to see the fitting.</p>
 
-<div class="ml-spinner" style="display: none; align-items: center; margin-top:10px; margin-bottom:10px;">
-    <div class="spinner-grow text-secondary" role="status"></div>
-    <div style="margin-left: 10px;">Calculating ...</div>
+<div class="btn-group" role="group" aria-label="Basic radio toggle button group">
+    <input type="radio" class="btn-check" name="btnradio" id="btn-line" autocomplete="off" checked>
+    <label class="btn btn-outline-primary" for="btn-line">Line</label>
+
+    <input type="radio" class="btn-check" name="btnradio" id="btn-plane" autocomplete="off">
+    <label class="btn btn-outline-primary" for="btn-plane">Plane</label>
 </div>
 
-<div id="ml-alert" class="alert alert-danger d-flex align-items-center d-none" role="alert">
-</div>
-
-<div id="chartDiv" style="width: 100%;"></div>
-<br>
-
-<div class="d-grid gap-2 d-md-flex">
-    <button id="btn-calculate" class="btn btn-primary" type="button" style="margin:0px;">Calculate</button>
-    <button id="btn-example-data" class="btn btn-primary" type="button" style="margin:0px;">Example Data</button>
-    <button id="btn-reset-data" class="btn btn-primary" type="button" style="margin:0px;">Reset Data</button>
-</div>
-<br>
-<div class="input-group mb-3">
-    <span class="input-group-text">degree</span>
-    <input aria-label="input-degree" class="form-control" id="input-degree" name="input-degree" min="0" max="4" type="number" step="1">
-</div>
-@for (int i = 1; i <= 5; i++)
-{
-    <div class="input-group mb-3">
-        <span class="input-group-text">x@(i); y@(i);</span>
-        <input aria-label="x@(i)" class="form-control" id="input-x@(i)" name="input-x@(i)" type="number" step="0.01">
-        <input aria-label="y@(i)" class="form-control" id="input-y@(i)" name="input-y@(i)" type="number" step="0.01">
+<div id="line-regression">
+    <div class="ml-spinner" style="display: none; align-items: center; margin-top:10px; margin-bottom:10px;">
+        <div class="spinner-grow text-secondary" role="status"></div>
+        <div style="margin-left: 10px;">Calculating ...</div>
     </div>
-}
 
-<div class="polynomial-definition">
-    <h3>Polynomial Definition</h3>
+    <div id="ml-alert" class="alert alert-danger d-flex align-items-center d-none" role="alert">
+    </div>
 
-    <p>
-        A polynomial of degree <strong>n</strong> is defined as fitting curve:
-    </p>
+    <div id="chartDiv" style="width: 100%;"></div>
+    <br>
 
-    <pre>
+    <div class="d-grid gap-2 d-md-flex">
+        <button id="btn-calculate" class="btn btn-primary" type="button" style="margin:0px;">Calculate</button>
+        <button id="btn-example-data" class="btn btn-primary" type="button" style="margin:0px;">Example Data</button>
+        <button id="btn-reset-data" class="btn btn-primary" type="button" style="margin:0px;">Reset Data</button>
+    </div>
+    <br>
+    <p>Increase the degree to see the fitting.</p>
+    <div class="input-group mb-3">
+        <span class="input-group-text">degree</span>
+        <input aria-label="input-degree" class="form-control" id="input-degree" name="input-degree" min="0" max="4" type="number" step="1">
+    </div>
+    @for (int i = 1; i <= 5; i++)
+    {
+        <div class="input-group mb-3">
+            <span class="input-group-text">x@(i); y@(i);</span>
+            <input aria-label="x@(i)" class="form-control" id="input-x@(i)" name="input-x@(i)" type="number" step="0.01">
+            <input aria-label="y@(i)" class="form-control" id="input-y@(i)" name="input-y@(i)" type="number" step="0.01">
+        </div>
+    }
+
+    <div class="polynomial-definition">
+        <h3>Polynomial Definition</h3>
+
+        <p>
+            A polynomial of degree <strong>n</strong> is defined as fitting curve:
+        </p>
+
+        <pre>
 f(x) = a₀ + a₁·x + a₂·x² + a₃·x³ + a₄·x⁴
     </pre>
 
-    <p>
-        Valid polynomial degrees: <strong>0 to 4</strong>.
-    </p>
+        <p>
+            Valid polynomial degrees: <strong>0 to 4</strong>.
+        </p>
 
-    <p>
-        <a href="https://en.wikipedia.org/wiki/Linear_regression" target="_blank">
-            Wikipedia: Linear Regression
-        </a>
-    </p>
+        <p>
+            <a href="https://en.wikipedia.org/wiki/Linear_regression" target="_blank">
+                Wikipedia: Linear Regression
+            </a>
+        </p>
 
-    <p>To calculate the fitting curve QR-Decomposition is used.</p>
+        <p>To calculate the fitting curve QR-Decomposition is used.</p>
 
-    <p>
-        <a href="https://en.wikipedia.org/wiki/QR_decomposition" target="_blank">
-            Wikipedia: QR-Decomposition
-        </a>
-    </p>
+        <p>
+            <a href="https://en.wikipedia.org/wiki/QR_decomposition" target="_blank">
+                Wikipedia: QR-Decomposition
+            </a>
+        </p>
+    </div>
+</div>
+
+<div id="plane-regression" style="display:none">
+    <div class="ml-spinner" style="display: none; align-items: center; margin-top:10px; margin-bottom:10px;">
+        <div class="spinner-grow text-secondary" role="status"></div>
+        <div style="margin-left: 10px;">Calculating ...</div>
+    </div>
+
+    <div id="ml-alert" class="alert alert-danger d-flex align-items-center d-none" role="alert">
+    </div>
+
+    <div id="chartDivPlane" style="width: 100%;"></div>
+    <br>
+
+    <div class="d-grid gap-2 d-md-flex">
+        <button id="btn-calculate-plane" class="btn btn-primary" type="button" style="margin:0px;">Calculate</button>
+        <button id="btn-example-data-plane" class="btn btn-primary" type="button" style="margin:0px;">Example Data</button>
+        <button id="btn-reset-data-plane" class="btn btn-primary" type="button" style="margin:0px;">Reset Data</button>
+    </div>
+    <br>
+    <div class="input-group mb-3">
+        <span class="input-group-text">offset</span>
+        <input aria-label="input-degree" class="form-control" id="input-offset" name="input-offset" type="number" step="1">
+    </div>
+    @for (int i = 1; i <= 5; i++)
+    {
+        <div class="input-group mb-3">
+            <span class="input-group-text">x@(i); y@(i); z@(i);</span>
+            <input aria-label="x@(i)" class="form-control" id="input-x-plane@(i)" name="input-x@(i)" type="number" step="0.01">
+            <input aria-label="y@(i)" class="form-control" id="input-y-plane@(i)" name="input-y@(i)" type="number" step="0.01">
+            <input aria-label="z@(i)" class="form-control" id="input-z-plane@(i)" name="input-z@(i)" type="number" step="0.01">
+        </div>
+    }
+
+    <div class="polynomial-definition">
+        <h3>Polynomial Definition</h3>
+
+        <p>
+            A polynomial of degree <strong>n</strong> is defined as fitting curve:
+        </p>
+
+        <pre>
+f(x) = a₀ + a₁·x + a₂·x² + a₃·x³ + a₄·x⁴
+    </pre>
+
+        <p>
+            Valid polynomial degrees: <strong>0 to 4</strong>.
+        </p>
+
+        <p>
+            <a href="https://en.wikipedia.org/wiki/Linear_regression" target="_blank">
+                Wikipedia: Linear Regression
+            </a>
+        </p>
+
+        <p>To calculate the fitting curve QR-Decomposition is used.</p>
+
+        <p>
+            <a href="https://en.wikipedia.org/wiki/QR_decomposition" target="_blank">
+                Wikipedia: QR-Decomposition
+            </a>
+        </p>
+    </div>
 </div>
 
 
@@ -78,6 +151,8 @@ f(x) = a₀ + a₁·x + a₂·x² + a₃·x³ + a₄·x⁴
 <script type="text/javascript">
 
     document.getElementById('input-degree').value = 1;
+
+    document.getElementById('input-offset').value = 0.0;
 
     class LinearRegressionGraph {
         constructor(name, degree) {
@@ -91,6 +166,15 @@ f(x) = a₀ + a₁·x + a₂·x² + a₃·x³ + a₄·x⁴
             this.graphs = graphs;
             this.x_vector = x_vector;
             this.y_vector = y_vector;
+        }
+    }
+
+    class AJAX_LinearRegressionPlane_Model {
+        constructor(x_vector, y_vector, z_vector, offset) {
+            this.x_vector = x_vector;
+            this.y_vector = y_vector;
+            this.z_vector = z_vector;
+            this.offset = offset;
         }
     }
 
@@ -279,6 +363,182 @@ f(x) = a₀ + a₁·x + a₂·x² + a₃·x³ + a₄·x⁴
     buttonExampleData.addEventListener('click', exampleData);
 
     buttonResetData.addEventListener('click', resetData);
+
+    /////plane
+
+    let arrayXPlane = [];
+    let arrayYPlane = [];
+    let arrayZPlane = [];
+
+    function calculatePlane() {
+
+        document.getElementById('ml-alert').classList.add('d-none');
+        document.querySelector('#plane-regression .ml-spinner').style.display = 'flex';
+
+        let retVal = getValuesPlane();
+
+        if (retVal == -1) {
+            document.querySelector('#plane-regression .ml-spinner').style.display = 'none';
+
+            const alert = document.getElementById('ml-alert');
+            alert.classList.remove('d-none');
+            alert.innerHTML = 'INSERT AT LEAST TWO VALUE-PAIRS';
+
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+            return;
+        }
+
+        const offsetRaw = document.getElementById('input-offset').value;
+        const offset = offsetRaw === "" ? 0.0 : Number(offsetRaw);
+
+
+        const model = new AJAX_LinearRegressionPlane_Model(arrayXPlane, arrayYPlane, arrayZPlane, offset);
+
+        let url = '/Module/AJAX/LinearRegressionPlane';
+        let data = model;
+        let serverData = {};
+
+        fetch(url, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(data)
+        })
+            .then(response => response.json())
+            .then(data => {
+
+                serverData = data;
+                console.log(serverData);
+
+                var chartData = JSON.parse(serverData);
+
+                var layout = {
+                    title: 'Scroll and Zoom',
+                    showlegend: true,
+                    legend: { orientation: 'h', y: 1.1 }
+                };
+
+                Plotly.newPlot('chartDivPlane', chartData.Fields[0], layout,
+                    { responsive: true, scrollZoom: true, displayModeBar: true });
+
+                document.querySelector('#plane-regression .ml-spinner').style.display = 'none';
+            })
+            .catch((error) => {
+
+                document.querySelector('#plane-regression .ml-spinner').style.display = 'none';
+
+                const alert = document.getElementById('ml-alert');
+                alert.innerHTML = 'SERVER-ERROR';
+                alert.classList.remove('d-none');
+
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+
+                console.error('Error:', error);
+            });
+    }
+
+
+    function getValuesPlane() {
+
+        arrayXPlane = [];
+        arrayYPlane = [];
+        arrayZPlane = [];
+
+        for (let i = 0; i < 5; i++) {
+
+            const input_x = document.getElementById(`input-x-plane${i + 1}`);
+            const input_y = document.getElementById(`input-y-plane${i + 1}`);
+            const input_z = document.getElementById(`input-z-plane${i + 1}`);
+
+            if (input_x && input_y && input_z &&
+                input_x.value && input_y.value && input_z.value) {
+
+                arrayXPlane.push(parseFloat(input_x.value));
+                arrayYPlane.push(parseFloat(input_y.value));
+                arrayZPlane.push(parseFloat(input_z.value));
+            }
+        }
+
+        if (arrayXPlane.length < 2 || arrayYPlane.length < 2 || arrayZPlane.length < 2)
+            return -1;
+
+        if (arrayXPlane.length !== arrayYPlane.length || arrayXPlane.length !== arrayZPlane.length)
+            return -1;
+
+        // let pairedArray = arrayXPlane.map((x, index) => ({
+        //     x: x,
+        //     y: arrayYPlane[index],
+        //     z: arrayZPlane[index]
+        // }));
+
+        // pairedArray.sort((a, b) => a.x - b.x);
+
+        // arrayXPlane = pairedArray.map(p => p.x);
+        // arrayYPlane = pairedArray.map(p => p.y);
+        // arrayZPlane = pairedArray.map(p => p.z);
+
+        return 1;
+    }
+
+    function exampleDataPlane() {
+
+        for (let i = 0; i < 5; i++) {
+
+            const input_x = document.getElementById(`input-x-plane${i + 1}`);
+            const input_y = document.getElementById(`input-y-plane${i + 1}`);
+            const input_z = document.getElementById(`input-z-plane${i + 1}`);
+
+            let rx = Math.random() * 10;
+            let ry = Math.random() * 10;
+            let rz = Math.random() * 10;
+
+            input_x.value = rx.toFixed(2);
+            input_y.value = ry.toFixed(2);
+            input_z.value = rz.toFixed(2);
+        }
+    }
+
+    function resetDataPlane() {
+
+        for (let i = 0; i < 5; i++) {
+
+            document.getElementById(`input-x-plane${i + 1}`).value = '';
+            document.getElementById(`input-y-plane${i + 1}`).value = '';
+            document.getElementById(`input-z-plane${i + 1}`).value = '';
+        }
+    }
+
+    document.getElementById('btn-calculate-plane').addEventListener('click', calculatePlane);
+    document.getElementById('btn-example-data-plane').addEventListener('click', exampleDataPlane);
+    document.getElementById('btn-reset-data-plane').addEventListener('click', resetDataPlane);
+
+
+    ////
+
+
+
+    const btnLine = document.getElementById('btn-line');
+    const btnPlane = document.getElementById('btn-plane');
+
+    const divLine = document.getElementById('line-regression');
+    const divPlane = document.getElementById('plane-regression');
+
+
+    btnLine.addEventListener('click', () => {
+        btnLine.classList.add('active');
+        btnPlane.classList.remove('active');
+
+        divLine.style.display = 'block';
+        divPlane.style.display = 'none';
+    });
+
+    btnPlane.addEventListener('click', () => {
+        btnPlane.classList.add('active');
+        btnLine.classList.remove('active');
+
+        divLine.style.display = 'none';
+        divPlane.style.display = 'block';
+    });
+
 
 
 </script>  

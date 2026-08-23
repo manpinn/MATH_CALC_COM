@@ -49,8 +49,7 @@ namespace MATH_CALC_COM.Controllers
             LinearRegression calculator = new LinearRegression();
 
             string jsonResult = calculator.LinearRegressionPlanePlotter(
-     offset: 0.0, // Or model.offset if it exists in your model
-     graphs: model.graphs,
+     offset: model.offset,
      x_vector: model.x_vector,
      y_vector: model.y_vector,
      z_vector: model.z_vector
@@ -70,13 +69,13 @@ namespace MATH_CALC_COM.Controllers
 
         public class AJAX_LinearRegressionPlane_Model
         {
-            public LinearRegressionGraph[] graphs { get; set; }
-
             public double[] x_vector { get; set; }
 
             public double[] y_vector { get; set; }
 
             public double[] z_vector { get; set; }
+
+            public double offset { get; set; }
         }
 
 

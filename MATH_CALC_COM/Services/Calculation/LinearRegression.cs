@@ -207,7 +207,6 @@ namespace MATH_CALC_COM.Services.Calculation
 
         public string LinearRegressionPlanePlotter(
             double offset,
-            LinearRegressionGraph[] graphs,
             double[] x_vector,
             double[] y_vector,
             double[] z_vector
