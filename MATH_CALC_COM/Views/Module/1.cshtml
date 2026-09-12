@@ -32,6 +32,7 @@
         <button id="btn-calculate" class="btn btn-primary" type="button" style="margin:0px;">Calculate</button>
         <button id="btn-example-data" class="btn btn-primary" type="button" style="margin:0px;">Example Data</button>
         <button id="btn-reset-data" class="btn btn-primary" type="button" style="margin:0px;">Reset Data</button>
+        <button id="btn-play" class="btn btn-primary" type="button" style="margin:0px;"onclick="runRegressionAutomation()" >Play</button>
     </div>
     <br>
     <p>Increase the degree to see the fitting.</p>
@@ -535,6 +536,42 @@ f(x) = a₀ + a₁·x + a₂·x² + a₃·x³ + a₄·x⁴
         divPlane.style.display = 'block';
     });
 
+
+    async function runRegressionAutomation() {
+
+        const exampleBtn = [...document.querySelectorAll("button")]
+            .find(b => b.textContent.match(/example data/i));
+
+        if (exampleBtn) {
+            exampleBtn.click();
+        }
+
+        const degreeInput = document.getElementById("input-degree");
+
+        for (let d = 1; d <= 4; d++) {
+
+            degreeInput.value = d;
+            degreeInput.dispatchEvent(new Event('input', { bubbles: true }));
+
+            const calcBtn = [...document.querySelectorAll("button")]
+                .find(b => b.textContent.match(/calculate/i));
+
+            if (calcBtn) {
+                calcBtn.click();
+            }
+
+            await new Promise(r => setTimeout(r, 3000));
+        }
+    }
+
+
+    window.onload = function() 
+    {
+        runRegressionAutomation();
+    }
+
+    
+ 
 
 
 </script>  
