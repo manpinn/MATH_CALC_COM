@@ -144,7 +144,10 @@ f(x) = a₀ + a₁·x + a₂·x² + a₃·x³ + a₄·x⁴
 
 
 
-<script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+@* <script src="https://cdn.plot.ly/plotly-latest.min.js"></script> *@
+
+<script src="https://cdn.jsdelivr.net/npm/plotly.js@2.32.0/dist/plotly.min.js"></script>
+
 <script type="text/javascript">
 
     document.getElementById('input-degree').value = 1;
@@ -243,6 +246,42 @@ f(x) = a₀ + a₁·x + a₂·x² + a₃·x³ + a₄·x⁴
                         y: 1.1
                     }
                 };
+
+
+                // Nur Messpunkte (blaue Marker) mit Koordinaten labeln – 2 Nachkommastellen
+                chartData.Fields[0].forEach(trace => {
+
+                    const isScatter = trace.type === "scatter";
+                    const hasMarkers = trace.mode && trace.mode.includes("markers");
+
+                    // Regression-Linie NICHT labeln
+                    const isLineOnly = trace.mode === "lines";
+                    const isRegression =
+                        trace.name?.toLowerCase().includes("regression") ||
+                        trace.name?.toLowerCase().includes("fit") ||
+                        trace.line; // Linien haben line:{}
+
+                    if (isScatter && hasMarkers && !isLineOnly && !isRegression) {
+
+                        // Koordinaten runden und als Label setzen
+                        trace.text = trace.x.map((x, i) => {
+                            const xx = Number(x).toFixed(2);
+                            const yy = Number(trace.y[i]).toFixed(2);
+                            return `(${xx}, ${yy})`;
+                        });
+
+                        trace.mode = "markers+text";
+                        trace.textposition = "top center";
+
+                        trace.textfont = {
+                            family: "Arial",
+                            size: 12,
+                            color: trace.marker?.color || "blue"
+                        };
+                    }
+                });
+
+
 
                 Plotly.newPlot('chartDiv', chartData.Fields[0], layout, { responsive: true, scrollZoom: true, displayModeBar: true });
 
