@@ -140,12 +140,6 @@ f(x) = a₀ + a₁·x + a₂·x² + a₃·x³ + a₄·x⁴
 </div>
 
 
-
-
-
-
-@* <script src="https://cdn.plot.ly/plotly-latest.min.js"></script> *@
-
 <script src="https://cdn.jsdelivr.net/npm/plotly.js@2.32.0/dist/plotly.min.js"></script>
 
 <script type="text/javascript">
@@ -247,23 +241,20 @@ f(x) = a₀ + a₁·x + a₂·x² + a₃·x³ + a₄·x⁴
                     }
                 };
 
-
-                // Nur Messpunkte (blaue Marker) mit Koordinaten labeln – 2 Nachkommastellen
                 chartData.Fields[0].forEach(trace => {
 
                     const isScatter = trace.type === "scatter";
                     const hasMarkers = trace.mode && trace.mode.includes("markers");
 
-                    // Regression-Linie NICHT labeln
+
                     const isLineOnly = trace.mode === "lines";
                     const isRegression =
                         trace.name?.toLowerCase().includes("regression") ||
                         trace.name?.toLowerCase().includes("fit") ||
-                        trace.line; // Linien haben line:{}
+                        trace.line;
 
                     if (isScatter && hasMarkers && !isLineOnly && !isRegression) {
 
-                        // Koordinaten runden und als Label setzen
                         trace.text = trace.x.map((x, i) => {
                             const xx = Number(x).toFixed(2);
                             const yy = Number(trace.y[i]).toFixed(2);
