@@ -139,6 +139,16 @@ f(x) = a₀ + a₁·x + a₂·x² + a₃·x³ + a₄·x⁴
     </div>
 </div>
 
+<style>
+    .plotly .modebar {
+        transform: scale(1.5);
+        transform-origin: top left;
+        left: 0 !important;
+        right: auto !important; 
+        justify-content: flex-start;
+        padding:10px;
+    }
+</style>
 
 <script src="https://cdn.jsdelivr.net/npm/plotly.js@2.32.0/dist/plotly.min.js"></script>
 
@@ -233,7 +243,7 @@ f(x) = a₀ + a₁·x + a₂·x² + a₃·x³ + a₄·x⁴
                 //var chartJson = '@Html.Raw(ViewData["ChartJson"])';
                 var chartData = JSON.parse(serverData);
                 var layout = {
-                    title: 'Scroll and Zoom',
+                    title: '',
                     showlegend: true,
                     legend: {
                         orientation: 'h',
@@ -439,7 +449,7 @@ f(x) = a₀ + a₁·x + a₂·x² + a₃·x³ + a₄·x⁴
                 var chartData = JSON.parse(serverData);
 
                 var layout = {
-                    title: 'Scroll and Zoom',
+                    title: '',
                     showlegend: true,
                     legend: { orientation: 'h', y: 1.1 }
                 };
