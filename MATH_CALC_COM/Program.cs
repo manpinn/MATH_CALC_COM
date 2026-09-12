@@ -1,9 +1,5 @@
-using MATH_CALC_COM.Services.DatabaseContext;
 using MATH_CALC_COM.Services.Middleware;
-using MATH_CALC_COM.Services.Request;
 using MathNet.Numerics;
-using Microsoft.AspNetCore.Authentication.Certificate;
-using Microsoft.EntityFrameworkCore;
 using System.Runtime.InteropServices;
 using System.Security.Cryptography.X509Certificates;
 
@@ -26,26 +22,9 @@ WebApplicationBuilder builder = null;
     // Add services to the container.
     builder.Services.AddControllersWithViews().AddRazorRuntimeCompilation();
 
-    // Add services to the container.
-    //builder.Services.AddDbContext<RequestDataContext>(options =>
-    //    options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")).EnableSensitiveDataLogging());
-
-    builder.Services.AddDbContext<RequestDataContext>(options =>
-        options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")));
-
-    //deactivated Database
-    //builder.Services.AddControllers(options =>
-    //{
-    //    options.Filters.Add<RequestDataFilter>();
-    //});
 
     builder.Services.AddLogging();
 
-    //deactivated Database
-    //builder.Services.AddSingleton<RequestDataFilter>();
-
-    builder.Services.AddAuthentication(CertificateAuthenticationDefaults.AuthenticationScheme)
-        .AddCertificate();
 
     // Configure logging
     builder.Logging.ClearProviders();

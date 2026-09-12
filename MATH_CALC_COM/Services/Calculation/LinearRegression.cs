@@ -1,5 +1,4 @@
-﻿using DevExpress.Utils;
-using MathNet.Numerics.LinearAlgebra;
+﻿using MathNet.Numerics.LinearAlgebra;
 using MathNet.Numerics.LinearAlgebra.Double;
 using Microsoft.FSharp.Core;
 using Plotly.NET;

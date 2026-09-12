@@ -1,8 +1,6 @@
 ﻿using Azure.Core;
 using MATH_CALC_COM.Models;
-using MATH_CALC_COM.Services.DatabaseContext;
 using MATH_CALC_COM.Services.Enums;
-using Microsoft.EntityFrameworkCore;
 using System.Linq.Expressions;
 using System.Net;
 using static System.Formats.Asn1.AsnWriter;
