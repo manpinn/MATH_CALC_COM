@@ -6,8 +6,10 @@
 <br />
 
 <p>A Visualization of Linear Regression.</p>
-<p>Simply insert data into the form or click the button 'Example Data'. 
-   Enter the degree (max = 4). After this click the button 'Calculate'.</p>
+<p>
+    Simply insert data into the form or click the button 'Example Data'.
+    Enter the degree (max = 4). After this click the button 'Calculate'.
+</p>
 
 <div class="btn-group" role="group" aria-label="Basic radio toggle button group">
     <input type="radio" class="btn-check" name="btnradio" id="btn-line" autocomplete="off" checked>
@@ -146,9 +148,9 @@ f(x) = a₀ + a₁·x + a₂·x² + a₃·x³ + a₄·x⁴
         transform: scale(1.5);
         transform-origin: top left;
         left: 0 !important;
-        right: auto !important; 
+        right: auto !important;
         justify-content: flex-start;
-        padding:10px;
+        padding: 10px;
     }
 </style>
 
@@ -619,7 +621,7 @@ f(x) = a₀ + a₁·x + a₂·x² + a₃·x³ + a₄·x⁴
         const wait = ms => new Promise(r => setTimeout(r, ms));
 
         for (let cycle = 1; cycle <= 2; cycle++) {
-            
+
             if (exampleBtn) exampleBtn.click();
 
             for (let offset = 0; offset <= 3; offset++) {
@@ -661,12 +663,22 @@ f(x) = a₀ + a₁·x + a₂·x² + a₃·x³ + a₄·x⁴
     }
 
 
-    window.onload = function() {
-        runRegressionAutomation();
-    }
+    window.onload = async function() {
 
-    
- 
+        const popup = document.getElementById("consent-popup");
+
+        if (popup.classList.contains("hidden")) {
+            runRegressionAutomation();
+            return;
+        }
+
+        while (!popup.classList.contains("hidden")) {
+            await new Promise(resolve => setTimeout(resolve, 100));
+        }
+
+        runRegressionAutomation();
+    };
+
 
 
 </script>  
