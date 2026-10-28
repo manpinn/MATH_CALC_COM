@@ -1,11 +1,23 @@
 ﻿using MATH_CALC_COM.Models;
 using MATH_CALC_COM.Services.Calculation;
+using MATH_CALC_COM.Services.Ollama;
 using Microsoft.AspNetCore.Mvc;
 
 namespace MATH_CALC_COM.Controllers
 {
     public class ModuleController : Controller
     {
+        private readonly ILogger<ModuleController> _logger;
+
+        private readonly OllamaService _ollama;
+
+        public ModuleController(ILogger<ModuleController> logger, OllamaService ollama)
+        {
+            _logger = logger;
+
+            _ollama = ollama;
+        }
+
         public IActionResult Index()
         {
             return View();
@@ -56,6 +68,16 @@ namespace MATH_CALC_COM.Controllers
  );
 
             return Json(jsonResult);
+        }
+
+       
+        [HttpPost]
+        [Route("/Module/chat")]
+        public async Task<IActionResult> Chat([FromBody] string prompt)
+        {
+            var answer = await _ollama.AskAsync(prompt);
+
+            return Ok(answer);
         }
 
         public class AJAX_LinearRegression_Model

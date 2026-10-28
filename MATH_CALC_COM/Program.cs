@@ -1,47 +1,50 @@
 using MATH_CALC_COM.Services.Middleware;
+using MATH_CALC_COM.Services.Ollama;
 using MathNet.Numerics;
 using System.Runtime.InteropServices;
 using System.Security.Cryptography.X509Certificates;
 
 WebApplicationBuilder builder = null;
 
-    if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
+if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
+{
+    builder = WebApplication.CreateBuilder(args);
+}
+else if (RuntimeInformation.IsOSPlatform(OSPlatform.Linux))
+{
+    builder = WebApplication.CreateBuilder(new WebApplicationOptions
     {
-        builder = WebApplication.CreateBuilder(args);
-    }
-    else if (RuntimeInformation.IsOSPlatform(OSPlatform.Linux))
-    {
-        builder = WebApplication.CreateBuilder(new WebApplicationOptions
-        {
-            WebRootPath = "/opt/REGRESIK/MATH_CALC_COM/wwwroot",
-            ContentRootPath = "/opt/REGRESIK/MATH_CALC_COM"
-        });
-    }
+        WebRootPath = "/opt/REGRESIK/MATH_CALC_COM/wwwroot",
+        ContentRootPath = "/opt/REGRESIK/MATH_CALC_COM"
+    });
+}
 
 
-    // Add services to the container.
-    builder.Services.AddControllersWithViews().AddRazorRuntimeCompilation();
+// Add services to the container.
+builder.Services.AddControllersWithViews().AddRazorRuntimeCompilation();
 
 
-    builder.Services.AddLogging();
+builder.Services.AddLogging();
+
+builder.Services.AddHttpClient<OllamaService>();
 
 
-    // Configure logging
-    builder.Logging.ClearProviders();
-    builder.Logging.AddConsole();
-    builder.Logging.AddDebug();
+// Configure logging
+builder.Logging.ClearProviders();
+builder.Logging.AddConsole();
+builder.Logging.AddDebug();
 
 
-    if (RuntimeInformation.IsOSPlatform(OSPlatform.Linux))
-    {
-        builder.Configuration
-        .SetBasePath("/opt/REGRESIK/MATH_CALC_COM")
-        .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true);
+if (RuntimeInformation.IsOSPlatform(OSPlatform.Linux))
+{
+    builder.Configuration
+    .SetBasePath("/opt/REGRESIK/MATH_CALC_COM")
+    .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true);
 
-        builder.Configuration
-        .SetBasePath("/opt/REGRESIK/MATH_CALC_COM")
-        .AddJsonFile($"appsettings.{builder.Environment.EnvironmentName}.json", optional: true, reloadOnChange: true);
-    }
+    builder.Configuration
+    .SetBasePath("/opt/REGRESIK/MATH_CALC_COM")
+    .AddJsonFile($"appsettings.{builder.Environment.EnvironmentName}.json", optional: true, reloadOnChange: true);
+}
 
 var app = builder.Build();
 

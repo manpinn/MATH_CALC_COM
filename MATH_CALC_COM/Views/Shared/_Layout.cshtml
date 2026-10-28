@@ -80,13 +80,13 @@
             </button>
         </div>
 
-        <div class="chat-body">
+        <div id="chat-body" class="chat-body">
             Hello! Shall I explain linear regression to you?
         </div>
 
         <div class="chat-footer">
-            <input type="text" placeholder="Enter message...">
-            <button>
+            <input type="text" placeholder="Enter message..." id="chatForm">
+            <button id="sendButton">
                 <i class="bi bi-send-fill"></i>
             </button>
         </div>
@@ -355,9 +355,60 @@
 
     </script>
 
+    <script>
+            async function sendMessage() {
+
+                const prompt = document.getElementById("message").value;
+
+                const response = await fetch("/Module/chat", {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json"
+                    },
+                    body: JSON.stringify(prompt)
+                });
+
+                const text = await response.text();
+
+                const chat = document.getElementById("chat-body");
+
+                const div = document.createElement("div");
+                div.className = "chat-body";
+
+                div.innerHTML = marked.parse(text);
+
+                chat.appendChild(div);
+
+                await MathJax.typesetPromise([div]);
+            }
+
+            document.getElementById("sendButton")
+                .addEventListener("click", sendMessage);
+
+            document.getElementById("chatForm")
+                .addEventListener("submit", async (e) => {
+
+                    e.preventDefault(); // Seite nicht neu laden
+
+                    await sendMessage();
+                });
+    </script>
+
     <script src="~/lib/twitter-bootstrap/js/bootstrap.bundle.min.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>
     @await RenderSectionAsync("Scripts", required: false)
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+    <script>
+            window.MathJax = {
+                tex: {
+                    inlineMath: [['\\(', '\\)'], ['$', '$']],
+                    displayMath: [['\\[', '\\]']]
+                }
+            };
+    </script>
 
+    <script async
+            src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js">
+    </script>
 </body>
 </html>
