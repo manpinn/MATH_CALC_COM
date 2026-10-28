@@ -8,7 +8,7 @@
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
     @* <link rel="stylesheet" href="~/MATH_CALC.COM.styles.css" asp-append-version="true" /> *@
     <link rel="stylesheet" href="~/css/Layout.css" asp-append-version="true" />
-   @*  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css"> *@
+    @*  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css"> *@
     <link rel="stylesheet" href="~/bootstrap-icons/font/bootstrap-icons.min.css">
 </head>
 <body>
@@ -72,6 +72,31 @@
         </div>
     </div>
 
+    <div id="chatWindow" class="chat-window">
+        <div class="chat-header">
+            Chatbot
+            <button id="closeChat" style="margin-right: 0px;">
+                <i class="bi bi-x-lg"></i>
+            </button>
+        </div>
+
+        <div class="chat-body">
+            Hello! Shall I explain linear regression to you?
+        </div>
+
+        <div class="chat-footer">
+            <input type="text" placeholder="Enter message...">
+            <button>
+                <i class="bi bi-send-fill"></i>
+            </button>
+        </div>
+    </div>
+
+    <!-- Chat Button -->
+    <button id="chatButton" class="chat-button">
+        <i class="bi bi-chat-right-dots-fill"></i>
+    </button>
+
     <style>
             .popup {
                 position: fixed;
@@ -113,6 +138,88 @@
                 background: #f44336;
                 color: #fff;
             }
+
+            .chat-button {
+                position: fixed;
+                bottom: 20px;
+                right: 20px;
+                width: 60px;
+                height: 60px;
+                border: none;
+                border-radius: 50%;
+                background: #0d6efd;
+                color: #fff;
+                font-size: 24px;
+                cursor: pointer;
+                z-index: 1000;
+            }
+
+            .chat-window {
+                position: fixed;
+                bottom: 20px;
+                right: 20px;
+                width: 350px;
+                height: 500px;
+                background: white;
+                border-radius: 12px;
+                box-shadow: 0 0 20px rgba(0,0,0,.2);
+                display: flex;
+                flex-direction: column;
+                opacity: 0;
+                visibility: hidden;
+                transform: translateY(20px) scale(0.9);
+                transition: opacity 0.3s ease, transform 0.3s ease, visibility 0.3s;
+            }
+
+                .chat-window.show {
+                    opacity: 1;
+                    visibility: visible;
+                    transform: translateY(0) scale(1);
+                }
+
+            .chat-header {
+                background: #0d6efd;
+                color: white;
+                padding: 15px;
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                height:50px;
+            }
+
+                .chat-header button {
+                    border: none;
+                    background: transparent;
+                    color: white;
+                    cursor: pointer;
+                }
+
+            .chat-body {
+                flex: 1;
+                padding: 15px;
+                overflow-y: auto;
+            }
+
+            .chat-footer {
+                display: flex;
+                border-top: 1px solid #ddd;
+            }
+
+                .chat-footer input {
+                    flex: 1;
+                    border: none;
+                    padding: 10px;
+                    outline: none;
+                }
+
+                .chat-footer button {
+                    border: none;
+                    background: #0d6efd;
+                    color: white;
+                    padding: 0 15px;
+                    cursor: pointer;
+                }
+
     </style>
 
     <script>
@@ -156,75 +263,98 @@
             }
     </script>
 
+
     <script>
-        const mediaQuery = window.matchMedia('(max-width: 1000px)');
+            const mediaQuery = window.matchMedia('(max-width: 1000px)');
 
-        const main = document.querySelector('.container-ml');
+            const main = document.querySelector('.container-ml');
 
-        const sidebar = document.querySelector('.ml-sidebar');
+            const sidebar = document.querySelector('.ml-sidebar');
 
-        function showSidebar() {
-            sidebar.style.width = '200px'; // or any desired width
-            sidebar.style.opacity = '1';
-            sidebar.classList.add('active');
-
-            main.style.marginLeft = '210px';
-            main.classList.add('active');
-        }
-
-        function hideSidebar() {
-            sidebar.style.width = '0px';
-            sidebar.style.opacity = '0';
-            sidebar.classList.remove('active');
-
-            main.style.marginLeft = '10px';
-            main.classList.remove('active');
-        }
-
-        function handleMediaQueryChange(event) {
-            if (event.matches) {
-                // Media query matches (screen width is 1000px or less)
-                sidebar.style.width = '0px';
-                sidebar.style.opacity = '0';
-                sidebar.style.transition = 'width 0.3s ease-in-out, opacity 0.3s ease-in-out';
-                sidebar.classList.remove('active');
-
-                main.style.marginLeft = '10px';
-                main.style.transition = 'margin-left ease 0.3s';
-                main.classList.remove('active');
-            } else {
-                // Media query does not match (screen width is greater than 1000px)
-                sidebar.style.width = '';
-                sidebar.style.opacity = '';
-                sidebar.style.transition = '';
+            function showSidebar() {
+                sidebar.style.width = '200px'; // or any desired width
+                sidebar.style.opacity = '1';
                 sidebar.classList.add('active');
 
                 main.style.marginLeft = '210px';
+                main.classList.add('active');
+            }
+
+            function hideSidebar() {
+                sidebar.style.width = '0px';
+                sidebar.style.opacity = '0';
+                sidebar.classList.remove('active');
+
+                main.style.marginLeft = '10px';
                 main.classList.remove('active');
             }
-        }
 
-        mediaQuery.addListener(handleMediaQueryChange);
+            function handleMediaQueryChange(event) {
+                if (event.matches) {
+                    // Media query matches (screen width is 1000px or less)
+                    sidebar.style.width = '0px';
+                    sidebar.style.opacity = '0';
+                    sidebar.style.transition = 'width 0.3s ease-in-out, opacity 0.3s ease-in-out';
+                    sidebar.classList.remove('active');
 
-        handleMediaQueryChange(mediaQuery);
+                    main.style.marginLeft = '10px';
+                    main.style.transition = 'margin-left ease 0.3s';
+                    main.classList.remove('active');
+                } else {
+                    // Media query does not match (screen width is greater than 1000px)
+                    sidebar.style.width = '';
+                    sidebar.style.opacity = '';
+                    sidebar.style.transition = '';
+                    sidebar.classList.add('active');
 
-        document.getElementById('navbar-ml-menu').addEventListener('click', function () {
-            if (sidebar.classList.contains('active')) {
-                hideSidebar();
-            } else {
-                showSidebar();
+                    main.style.marginLeft = '210px';
+                    main.classList.remove('active');
+                }
             }
-        });
 
-        document.getElementsByClassName('container-ml')[0].addEventListener('click', function () {
-            if (window.innerWidth < 1000 && sidebar.classList.contains('active')) {
-                hideSidebar();
-            }
-        });
+            mediaQuery.addListener(handleMediaQueryChange);
+
+            handleMediaQueryChange(mediaQuery);
+
+            document.getElementById('navbar-ml-menu').addEventListener('click', function () {
+                if (sidebar.classList.contains('active')) {
+                    hideSidebar();
+                } else {
+                    showSidebar();
+                }
+            });
+
+            document.getElementsByClassName('container-ml')[0].addEventListener('click', function () {
+                if (window.innerWidth < 1000 && sidebar.classList.contains('active')) {
+                    hideSidebar();
+                }
+            });
 
 
 
     </script>
+
+    
+    <script>
+            const chatButton = document.getElementById('chatButton');
+            const chatWindow = document.getElementById('chatWindow');
+            const closeChat = document.getElementById('closeChat');
+
+            chatButton.addEventListener('click', () => {
+                chatWindow.classList.add('show');
+                chatButton.style.display = 'none';
+            });
+
+            closeChat.addEventListener('click', () => {
+                chatWindow.classList.remove('show');
+
+                setTimeout(() => {
+                    chatButton.style.display = 'block';
+                }, 300);
+            });
+
+    </script>
+
     <script src="~/lib/twitter-bootstrap/js/bootstrap.bundle.min.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>
     @await RenderSectionAsync("Scripts", required: false)
