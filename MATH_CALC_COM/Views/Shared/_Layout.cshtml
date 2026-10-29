@@ -81,7 +81,7 @@
         </div>
 
         <div id="chat-body" class="chat-body">
-            Hello! Shall I explain linear regression to you?
+
         </div>
 
         <div class="chat-footer">
@@ -158,8 +158,8 @@
                 position: fixed;
                 bottom: 20px;
                 right: 20px;
-                width: 350px;
-                height: 500px;
+                max-width: 80%;
+                max-height:50%;
                 background: white;
                 border-radius: 12px;
                 box-shadow: 0 0 20px rgba(0,0,0,.2);
@@ -219,6 +219,30 @@
                     padding: 0 15px;
                     cursor: pointer;
                 }
+
+                .chat-user {
+    background: #0d6efd;
+    color: white;
+    padding: 10px 15px;
+    border-radius: 15px;
+    margin: 10px 0;
+    max-width: 80%;
+    margin-left: auto;
+    text-align: left;
+    word-wrap: break-word;
+}
+
+.chat-bot {
+    background: #f1f1f1;
+    color: black;
+    padding: 10px 15px;
+    border-radius: 15px;
+    margin: 10px 0;
+    max-width: 80%;
+    margin-right: auto;
+    text-align: left;
+    word-wrap: break-word;
+}
 
     </style>
 
@@ -345,6 +369,36 @@
                 chatButton.style.display = 'none';
             });
 
+            let firstOpen = true;
+
+            chatButton.addEventListener('click', async () => {
+
+                ///////////////////
+
+                 const mlMain =
+        document.querySelector(".ml-main");
+
+    chatWindow.classList.add('show');
+    chatButton.style.display = 'none';
+
+
+                //////////////////
+
+            chatWindow.classList.add('show');
+            chatButton.style.display = 'none';
+
+            if (firstOpen) {
+
+            firstOpen = false;
+
+            document.getElementById("chatForm").value =
+                "Explain linear regression.";
+
+        await sendMessage();
+    }
+});
+
+
             closeChat.addEventListener('click', () => {
                 chatWindow.classList.remove('show');
 
@@ -390,6 +444,35 @@ async function sendMessage() {
     if (!prompt)
         return;
 
+        document.getElementById("chatForm").value = "";
+
+        const chat =
+    document.getElementById("chat-body");
+
+    const userDiv =
+    document.createElement("div");
+
+    userDiv.className = "chat-user";
+    userDiv.textContent = prompt;
+
+    chat.appendChild(userDiv);
+
+
+    const loadingDiv = document.createElement("div");
+
+loadingDiv.className = "chat-bot";
+loadingDiv.id = "loadingMessage";
+
+loadingDiv.innerHTML = `
+    <span class="spinner-border spinner-border-sm"></span>
+    loading...
+`;
+
+chat.appendChild(loadingDiv);
+
+chat.scrollTop = chat.scrollHeight;
+
+
     try {
 
         const response = await fetch("/Module/chat", {
@@ -405,8 +488,7 @@ async function sendMessage() {
 
         const text = await response.text();
 
-        console.log("RAW RESPONSE:");
-        console.log(text);
+        document.getElementById("loadingMessage")?.remove();
 
         let fixedText = text;
 
@@ -427,14 +509,17 @@ async function sendMessage() {
 
         const chat = document.getElementById("chat-body");
 
-        const div = document.createElement("div");
-        div.className = "chat-message";
+        const botDiv =
+            document.createElement("div");
 
-        div.innerHTML = marked.parse(fixedText);
+            botDiv.className = "chat-bot";
 
-        chat.appendChild(div);
+            botDiv.innerHTML =
+                marked.parse(fixedText);
 
-        renderMathInElement(div, {
+        chat.appendChild(botDiv);
+
+        renderMathInElement(botDiv, {
             delimiters: [
                 { left: "\\[", right: "\\]", display: true },
                 { left: "\\(", right: "\\)", display: false },
@@ -451,6 +536,8 @@ async function sendMessage() {
     catch (error) {
 
         console.error(error);
+
+        document.getElementById("loadingMessage")?.remove();
 
         const chat = document.getElementById("chat-body");
 
@@ -475,21 +562,32 @@ document
             sendMessage();
         }
     });
-</script>
 
-document.getElementById("sendButton")
-    .addEventListener("click", sendMessage);
+    ///////////////////
+ 
+chatButton.addEventListener('click', () => {
 
-document.getElementById("chatForm")
-    .addEventListener("keydown", function (event) {
+    chatWindow.classList.add('show');
+    chatButton.style.display = 'none';
 
-        if (event.key === "Enter") {
-            event.preventDefault();
-            sendMessage();
-        }
-    });
+    const chatBody =
+        document.getElementById("chat-body");
 
-    </script>
+    if (chatBody.children.length === 0) {
+
+        const botDiv =
+            document.createElement("div");
+
+        botDiv.className = "chat-bot";
+
+        botDiv.textContent =
+            "Hello! Shall I explain linear regreession to you?";
+
+        chatBody.appendChild(botDiv);
+    }
+});
+
+        </script>
 
     <script src="~/lib/twitter-bootstrap/js/bootstrap.bundle.min.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>

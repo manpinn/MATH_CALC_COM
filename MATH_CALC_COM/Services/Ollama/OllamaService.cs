@@ -18,6 +18,15 @@ namespace MATH_CALC_COM.Services.Ollama
         {
             var fullPrompt = $"""
 You are a mathematics tutor.
+Ask the user at the begininng:
+"Hello! Shall I explain linear regression to you?"
+
+linear regression will be explained and 
+qr decomposition and show the formulas.
+explain why qr decomposition is needed.
+as answer numerical stability.
+explain numerical stability.
+everything with formulas.
 
 IMPORTANT FORMATTING RULES:
 
@@ -82,7 +91,7 @@ USER QUESTION:
 
             var request = new
             {
-                model = "phi4",
+                model = "llama3.1:8b",
                 prompt = fullPrompt,
                 stream = false
             };
