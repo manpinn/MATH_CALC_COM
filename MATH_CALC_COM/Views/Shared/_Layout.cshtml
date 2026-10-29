@@ -355,60 +355,144 @@
 
     </script>
 
-    <script>
-            async function sendMessage() {
+   
+<link rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/katex@0.16.22/dist/katex.min.css">
 
-                const prompt = document.getElementById("message").value;
+<script defer
+        src="https://cdn.jsdelivr.net/npm/katex@0.16.22/dist/katex.min.js"></script>
 
-                const response = await fetch("/Module/chat", {
-                    method: "POST",
-                    headers: {
-                        "Content-Type": "application/json"
-                    },
-                    body: JSON.stringify(prompt)
-                });
+<script defer
+        src="https://cdn.jsdelivr.net/npm/katex@0.16.22/dist/contrib/auto-render.min.js"></script>
 
-                const text = await response.text();
+<script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
 
-                const chat = document.getElementById("chat-body");
 
-                const div = document.createElement("div");
-                div.className = "chat-body";
 
-                div.innerHTML = marked.parse(text);
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+    renderMathInElement(document.body, {
+        delimiters: [
+            { left: "$$", right: "$$", display: true },
+            { left: "\\[", right: "\\]", display: true },
+            { left: "\\(", right: "\\)", display: false },
+            { left: "$", right: "$", display: false }
+        ],
+        throwOnError: false
+    });
+});
+</script>
+<script>
+async function sendMessage() {
 
-                chat.appendChild(div);
+    const prompt = document.getElementById("chatForm").value.trim();
 
-                await MathJax.typesetPromise([div]);
-            }
+    if (!prompt)
+        return;
 
-            document.getElementById("sendButton")
-                .addEventListener("click", sendMessage);
+    try {
 
-            document.getElementById("chatForm")
-                .addEventListener("submit", async (e) => {
+        const response = await fetch("/Module/chat", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify(prompt)
+        });
 
-                    e.preventDefault(); // Seite nicht neu laden
+        if (!response.ok)
+            throw new Error(`HTTP ${response.status}`);
 
-                    await sendMessage();
-                });
+        const text = await response.text();
+
+        console.log("RAW RESPONSE:");
+        console.log(text);
+
+        let fixedText = text;
+
+        // AI liefert oft <br>
+        fixedText = fixedText.replace(/<br\s*\/?>/gi, "\n");
+
+        // HTML-Tags entfernen
+        fixedText = fixedText.replace(/<[^>]+>/g, "");
+
+        // [ ... ] -> \[ ... \]
+        fixedText = fixedText.replace(
+            /\[\s*([\s\S]*?)\s*\]/g,
+            '\\[$1\\]'
+        );
+
+        console.log("FIXED TEXT:");
+        console.log(fixedText);
+
+        const chat = document.getElementById("chat-body");
+
+        const div = document.createElement("div");
+        div.className = "chat-message";
+
+        div.innerHTML = marked.parse(fixedText);
+
+        chat.appendChild(div);
+
+        renderMathInElement(div, {
+            delimiters: [
+                { left: "\\[", right: "\\]", display: true },
+                { left: "\\(", right: "\\)", display: false },
+                { left: "$$", right: "$$", display: true },
+                { left: "$", right: "$", display: false }
+            ],
+            throwOnError: false
+        });
+
+        chat.scrollTop = chat.scrollHeight;
+
+        document.getElementById("chatForm").value = "";
+    }
+    catch (error) {
+
+        console.error(error);
+
+        const chat = document.getElementById("chat-body");
+
+        const div = document.createElement("div");
+        div.style.color = "red";
+        div.textContent = "Error communicating with server.";
+
+        chat.appendChild(div);
+    }
+}
+
+document
+    .getElementById("sendButton")
+    .addEventListener("click", sendMessage);
+
+document
+    .getElementById("chatForm")
+    .addEventListener("keydown", function (e) {
+
+        if (e.key === "Enter") {
+            e.preventDefault();
+            sendMessage();
+        }
+    });
+</script>
+
+document.getElementById("sendButton")
+    .addEventListener("click", sendMessage);
+
+document.getElementById("chatForm")
+    .addEventListener("keydown", function (event) {
+
+        if (event.key === "Enter") {
+            event.preventDefault();
+            sendMessage();
+        }
+    });
+
     </script>
 
     <script src="~/lib/twitter-bootstrap/js/bootstrap.bundle.min.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>
     @await RenderSectionAsync("Scripts", required: false)
-    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
-    <script>
-            window.MathJax = {
-                tex: {
-                    inlineMath: [['\\(', '\\)'], ['$', '$']],
-                    displayMath: [['\\[', '\\]']]
-                }
-            };
-    </script>
-
-    <script async
-            src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js">
-    </script>
 </body>
 </html>
