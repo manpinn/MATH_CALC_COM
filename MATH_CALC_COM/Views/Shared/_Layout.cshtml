@@ -75,6 +75,9 @@
     <div id="chatWindow" class="chat-window">
         <div class="chat-header">
             Chatbot
+            <button id="clearChat" class="btn btn-danger btn-sm">
+                <i class="bi bi-trash"> clear</i>
+            </button>
             <button id="closeChat" style="margin-right: 0px;">
                 <i class="bi bi-x-lg"></i>
             </button>
@@ -367,19 +370,12 @@
             chatButton.addEventListener('click', () => {
                 chatWindow.classList.add('show');
                 chatButton.style.display = 'none';
+                localStorage.setItem("chatOpen", "true");
             });
 
             let firstOpen = true;
 
             chatButton.addEventListener('click', async () => {
-
-                ///////////////////
-
-                 const mlMain =
-        document.querySelector(".ml-main");
-
-    chatWindow.classList.add('show');
-    chatButton.style.display = 'none';
 
 
                 //////////////////
@@ -387,15 +383,15 @@
             chatWindow.classList.add('show');
             chatButton.style.display = 'none';
 
-            if (firstOpen) {
+        //     if (firstOpen) {
 
-            firstOpen = false;
+        //     firstOpen = false;
 
-            document.getElementById("chatForm").value =
-                "Explain linear regression.";
+        //     document.getElementById("chatForm").value =
+        //         "Explain linear regression.";
 
-        await sendMessage();
-    }
+        // await sendMessage();
+    //}
 });
 
 
@@ -405,8 +401,42 @@
                 setTimeout(() => {
                     chatButton.style.display = 'block';
                 }, 300);
+
+                localStorage.setItem("chatOpen", "false");
             });
 
+            document.addEventListener("DOMContentLoaded", () => {
+
+    const isOpen =
+        localStorage.getItem("chatOpen");
+
+    if (isOpen === "true") {
+
+        chatWindow.classList.add("show");
+        chatButton.style.display = "none";
+    }
+});
+
+function saveChat()
+{
+    const chat =
+        document.getElementById("chat-body");
+
+    localStorage.setItem(
+        "chatHistory",
+        chat.innerHTML
+    );
+}
+
+document
+.getElementById("clearChat")
+.addEventListener("click", () => {
+
+    document.getElementById("chat-body")
+        .innerHTML = "";
+
+    localStorage.removeItem("chatHistory");
+});
     </script>
 
    
@@ -456,6 +486,7 @@ async function sendMessage() {
     userDiv.textContent = prompt;
 
     chat.appendChild(userDiv);
+    saveChat();
 
 
     const loadingDiv = document.createElement("div");
@@ -518,6 +549,7 @@ chat.scrollTop = chat.scrollHeight;
                 marked.parse(fixedText);
 
         chat.appendChild(botDiv);
+        saveChat();
 
         renderMathInElement(botDiv, {
             delimiters: [
@@ -563,6 +595,18 @@ document
         }
     });
 
+    document.addEventListener("DOMContentLoaded", () => {
+
+    const history =
+        localStorage.getItem("chatHistory");
+
+    if(history)
+    {
+        document.getElementById("chat-body")
+            .innerHTML = history;
+    }
+});
+
     ///////////////////
  
 chatButton.addEventListener('click', () => {
@@ -581,7 +625,7 @@ chatButton.addEventListener('click', () => {
         botDiv.className = "chat-bot";
 
         botDiv.textContent =
-            "Hello! Shall I explain linear regreession to you?";
+            "Hello! Shall I explain linear regression to you?";
 
         chatBody.appendChild(botDiv);
     }

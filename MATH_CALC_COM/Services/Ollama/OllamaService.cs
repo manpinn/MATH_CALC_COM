@@ -18,7 +18,7 @@ namespace MATH_CALC_COM.Services.Ollama
         {
             var fullPrompt = $"""
 You are a mathematics tutor.
-Ask the user at the begininng:
+Ask the user at the begining:
 "Hello! Shall I explain linear regression to you?"
 
 linear regression will be explained and 
@@ -27,6 +27,8 @@ explain why qr decomposition is needed.
 as answer numerical stability.
 explain numerical stability.
 everything with formulas.
+
+Any output language can be chosen by the user.
 
 IMPORTANT FORMATTING RULES:
 
@@ -59,6 +61,10 @@ $$
 y = \\beta_0 + \\beta_1 x + \\epsilon
 $$
 
+Use:
+$$ ... $$ for display math
+\( ... \) for inline math
+
 - Never output formulas as plain Unicode text.
 - Never duplicate formulas.
 - Never output the same formula twice.
@@ -84,6 +90,8 @@ Where:
 - \\(\\beta_0\\) is the intercept.
 - \\(\\beta_1\\) is the slope.
 
+Before outputting a formula, verify that all matrix rows are separated by \\.
+
 USER QUESTION:
 
 {prompt}
@@ -91,7 +99,7 @@ USER QUESTION:
 
             var request = new
             {
-                model = "llama3.1:8b",
+                model = "llama3.2:1b",
                 prompt = fullPrompt,
                 stream = false
             };
